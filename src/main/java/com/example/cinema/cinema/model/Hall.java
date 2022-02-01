@@ -1,11 +1,15 @@
 package com.example.cinema.cinema.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 @Entity
 public class Hall {
@@ -27,6 +31,14 @@ public class Hall {
     private Integer numSeats;
 
     private boolean active;
+
+    @OneToMany(mappedBy = "hall", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
+    private List<Row> rows = new LinkedList<>();
+
+    @OneToMany(mappedBy = "hall", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private List<Seance> seances = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -66,5 +78,29 @@ public class Hall {
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    public List<Row> getRows() {
+        return rows;
+    }
+
+    public void setRows(List<Row> rows) {
+        this.rows = rows;
+    }
+
+    public List<Seance> getSeances() {
+        return seances;
+    }
+
+    public void setSeances(List<Seance> seances) {
+        this.seances = seances;
+    }
+
+    public Integer countSeats(){
+        Integer count = 0;
+        for(Row row : rows)
+            count += row.getSeats().size();
+
+        return count;
     }
 }

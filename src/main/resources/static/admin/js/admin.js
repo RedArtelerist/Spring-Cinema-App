@@ -17,12 +17,33 @@ $(document).ready(function () {
 		$(this).attr('data-value', $(this).text().toLowerCase());
 	});
 
-	$('.filter__item-menu li').on('click', function() {
+	$('#filter__sort .filter__item-menu li').on('click', function() {
 		var text = $(this).text();
 		var item = $(this);
 		var id = item.closest('.filter').attr('id');
 		$('#'+id).find('.filter__item-btn input').val(text);
 		$('#filter-form').find('input[name="sort"]').val(text);
+
+		$('#filter-form').submit();
+	});
+
+	$('#filter__date .filter__item-menu li').on('click', function() {
+		var text = $(this).text();
+		var item = $(this);
+		var id = item.closest('.filter').attr('id');
+		$('#'+id).find('.filter__item-btn input').val(text);
+		$('#filter-form').find('input[name="date"]').val(text);
+
+		$('#filter-form').submit();
+	});
+
+	$('#filter__movie .filter__item-menu li').on('click', function() {
+		var movieId = $(this).data("id");
+		var text = $(this).text();
+		var item = $(this);
+		var id = item.closest('.filter').attr('id');
+		$('#'+id).find('.filter__item-btn input').val(text);
+		$('#filter-form').find('input[name="movieId"]').val(movieId);
 
 		$('#filter-form').submit();
 	});
@@ -76,6 +97,11 @@ $(document).ready(function () {
 		$('#del-form-' + id).submit();
 	});
 
+	$('#modal-delete-row .modal__btn--apply').on("click",function(){
+		var id = $(this).data("id");
+		$('#del-row-form-' + id).submit();
+	});
+
 	$('.modal__btn--dismiss').on('click', function (e) {
 		e.preventDefault();
 		$.magnificPopup.close();
@@ -104,9 +130,29 @@ $(document).ready(function () {
 		allowClear: true
 	});
 
+	$('#type').select2({
+		placeholder: "Choose type",
+		allowClear: true
+	});
+
 	$('#genre').select2({
 		placeholder: "Choose genre / genres",
 		maximumSelectionLength: 4
+	});
+
+	$('#technologies').select2({
+		placeholder: "Choose technology / technologies",
+		maximumSelectionLength: 3
+	});
+
+	$('#hall').select2({
+		placeholder: "Choose hall",
+		allowClear: true
+	});
+
+	$('#movie').select2({
+		placeholder: "Choose movie",
+		minimumResultsForSearch: 1
 	});
 
 	$('#company').select2({

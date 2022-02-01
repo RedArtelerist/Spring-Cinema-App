@@ -6,8 +6,16 @@
             <!-- main title -->
             <div class="col-12">
                 <div class="main__title">
-                    <h2>Add new cinema</h2>
+                    <#if cinema?? && cinema.id??>
+                        <h2>Edit cinema</h2>
+                    <#else>
+                        <h2>Add new cinema</h2>
+                    </#if>
+                    <div class="main__title-wrap">
+                        <a href="/admin/cinemas" class="main__title-link">all cinemas</a>
+                    </div>
                 </div>
+
             </div>
             <!-- end main title -->
 
@@ -149,7 +157,9 @@
                                 </div>
 
                                 <div class="col-12">
-                                    <button type="submit" class="form__btn">publish</button>
+                                    <div class="row">
+                                        <button type="submit" class="form__btn">publish</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -159,43 +169,6 @@
                 </form>
             </div>
             <!-- end form -->
-            <#if cinema?? && cinema.gallery?size gt 0>
-                <div class="container-fluid">
-                    <div class="row">
-                        <!-- main title -->
-                        <div class="col-12">
-                            <div class="main__title">
-                                <h2>Gallery</h2>
-                            </div>
-                        </div>
-                        <div class="col-12">
-                            <div class="row">
-                                <#list cinema.gallery as item>
-                                    <div class="col-12 col-md-5 form__cover">
-                                        <div class="row">
-                                            <form id="img_item_gallery" method="post" action="/admin/cinema/${cinema.id}/image/${item.id}/delete">
-                                                <input type="hidden" value="${_csrf.token}" name="_csrf">
-                                                <button type="submit" class="main__table-btn main__table-btn--delete">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                                                        <path d="M10,18a1,1,0,0,0,1-1V11a1,1,0,0,0-2,0v6A1,1,0,0,0,10,18ZM20,6H16V5a3,3,0,0,0-3-3H11A3,3,0,0,0,8,5V6H4A1,1,0,0,0,4,8H5V19a3,3,0,0,0,3,3h8a3,3,0,0,0,3-3V8h1a1,1,0,0,0,0-2ZM10,5a1,1,0,0,1,1-1h2a1,1,0,0,1,1,1V6H10Zm7,14a1,1,0,0,1-1,1H8a1,1,0,0,1-1-1V8H17Zm-3-1a1,1,0,0,0,1-1V11a1,1,0,0,0-2,0v6A1,1,0,0,0,14,18Z"/>
-                                                    </svg>
-                                                </button>
-                                            </form>
-                                            <div class="col-12 col-sm-6 col-md-12">
-                                                <div class="form__img" style="max-height: 300px">
-                                                    <img id="form__img" src="${item.imageUrl}" alt="">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </#list>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </#if>
-
-
             <#if cinema?? && cinema.id??>
                 <div class="container-fluid">
                     <div class="row">
@@ -203,6 +176,9 @@
                         <div class="col-12">
                             <div class="main__title">
                                 <h2>Halls</h2>
+                                <div class="main__title-wrap">
+                                    <a href="/admin/cinema/${cinema.id}/seances" class="main__title-link">seances</a>
+                                </div>
                                 <div class="main__title-wrap">
                                     <a id="btn-hall-open-modal" href="#modal-hall" class="main__title-link open-modal">add hall</a>
                                 </div>
@@ -219,59 +195,59 @@
                                 <div class="main__table-wrap">
                                     <table class="main__table">
                                         <thead>
-                                            <tr>
-                                                <th>Id</th>
-                                                <th>Name</th>
-                                                <th>Num seats</th>
-                                                <th>Status</th>
-                                                <th>Actions</th>
-                                            </tr>
+                                        <tr>
+                                            <th>Id</th>
+                                            <th>Name</th>
+                                            <th>Num seats</th>
+                                            <th>Status</th>
+                                            <th>Actions</th>
+                                        </tr>
                                         </thead>
 
                                         <tbody id="halls">
-                                            <#if cinema.halls?has_content>
-                                                <#list cinema.halls as hall>
-                                                    <tr>
-                                                        <td>
-                                                            <div class="main__table-text">${hall.id}</div>
-                                                        </td>
-                                                        <td>
-                                                            <div class="main__table-text">${hall.name}</div>
-                                                        </td>
-                                                        <td>
-                                                            <div class="main__table-text">${hall.numSeats}</div>
-                                                        </td>
-                                                        <td>
-                                                            <#if hall.active>
-                                                                <div class="main__table-text main__table-text--green">Visible</div>
-                                                            <#else>
-                                                                <div class="main__table-text main__table-text--red">Hidden</div>
-                                                            </#if>
-                                                        </td>
-                                                        <td>
-                                                            <div class="main__table-btns">
-                                                                <a href="/hall/${hall.id}" class="main__table-btn main__table-btn--view">
-                                                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21.92,11.6C19.9,6.91,16.1,4,12,4S4.1,6.91,2.08,11.6a1,1,0,0,0,0,.8C4.1,17.09,7.9,20,12,20s7.9-2.91,9.92-7.6A1,1,0,0,0,21.92,11.6ZM12,18c-3.17,0-6.17-2.29-7.9-6C5.83,8.29,8.83,6,12,6s6.17,2.29,7.9,6C18.17,15.71,15.17,18,12,18ZM12,8a4,4,0,1,0,4,4A4,4,0,0,0,12,8Zm0,6a2,2,0,1,1,2-2A2,2,0,0,1,12,14Z"/></svg>
-                                                                </a>
+                                        <#if cinema.halls?has_content>
+                                            <#list cinema.halls as hall>
+                                                <tr>
+                                                    <td>
+                                                        <div class="main__table-text">${hall.id}</div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="main__table-text">${hall.name}</div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="main__table-text">${hall.numSeats}</div>
+                                                    </td>
+                                                    <td>
+                                                        <#if hall.active>
+                                                            <div class="main__table-text main__table-text--green">Visible</div>
+                                                        <#else>
+                                                            <div class="main__table-text main__table-text--red">Hidden</div>
+                                                        </#if>
+                                                    </td>
+                                                    <td>
+                                                        <div class="main__table-btns">
+                                                            <a href="/admin/hall/${hall.id}" class="main__table-btn main__table-btn--view">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21.92,11.6C19.9,6.91,16.1,4,12,4S4.1,6.91,2.08,11.6a1,1,0,0,0,0,.8C4.1,17.09,7.9,20,12,20s7.9-2.91,9.92-7.6A1,1,0,0,0,21.92,11.6ZM12,18c-3.17,0-6.17-2.29-7.9-6C5.83,8.29,8.83,6,12,6s6.17,2.29,7.9,6C18.17,15.71,15.17,18,12,18ZM12,8a4,4,0,1,0,4,4A4,4,0,0,0,12,8Zm0,6a2,2,0,1,1,2-2A2,2,0,0,1,12,14Z"/></svg>
+                                                            </a>
 
-                                                                <a href="#modal-hall" class="main__table-btn main__table-btn--edit open-modal" onclick="edit(this, '${hall.id}', '${hall.name}', '${hall.numSeats}', <#if hall.active>true<#else>false</#if>)">
-                                                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M22,7.24a1,1,0,0,0-.29-.71L17.47,2.29A1,1,0,0,0,16.76,2a1,1,0,0,0-.71.29L13.22,5.12h0L2.29,16.05a1,1,0,0,0-.29.71V21a1,1,0,0,0,1,1H7.24A1,1,0,0,0,8,21.71L18.87,10.78h0L21.71,8a1.19,1.19,0,0,0,.22-.33,1,1,0,0,0,0-.24.7.7,0,0,0,0-.14ZM6.83,20H4V17.17l9.93-9.93,2.83,2.83ZM18.17,8.66,15.34,5.83l1.42-1.41,2.82,2.82Z"/></svg>
-                                                                </a>
+                                                            <a href="#modal-hall" class="main__table-btn main__table-btn--edit open-modal" onclick="edit(this, '${hall.id}', '${hall.name}', '${hall.numSeats}', <#if hall.active>true<#else>false</#if>)">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M22,7.24a1,1,0,0,0-.29-.71L17.47,2.29A1,1,0,0,0,16.76,2a1,1,0,0,0-.71.29L13.22,5.12h0L2.29,16.05a1,1,0,0,0-.29.71V21a1,1,0,0,0,1,1H7.24A1,1,0,0,0,8,21.71L18.87,10.78h0L21.71,8a1.19,1.19,0,0,0,.22-.33,1,1,0,0,0,0-.24.7.7,0,0,0,0-.14ZM6.83,20H4V17.17l9.93-9.93,2.83,2.83ZM18.17,8.66,15.34,5.83l1.42-1.41,2.82,2.82Z"/></svg>
+                                                            </a>
 
-                                                                <form id="del-form-${hall.id}" method="post" action="/admin/cinema/${cinema.id}/hall/${hall.id}/delete">
-                                                                    <input type="hidden" value="${_csrf.token}" name="_csrf">
-                                                                </form>
+                                                            <form id="del-form-${hall.id}" method="post" action="/admin/hall/${hall.id}/delete">
+                                                                <input type="hidden" value="${_csrf.token}" name="_csrf">
+                                                            </form>
 
-                                                                <a href="#modal-delete" class="main__table-btn main__table-btn--delete open-modal" data-id="${hall.id}">
-                                                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                                                                        <path d="M10,18a1,1,0,0,0,1-1V11a1,1,0,0,0-2,0v6A1,1,0,0,0,10,18ZM20,6H16V5a3,3,0,0,0-3-3H11A3,3,0,0,0,8,5V6H4A1,1,0,0,0,4,8H5V19a3,3,0,0,0,3,3h8a3,3,0,0,0,3-3V8h1a1,1,0,0,0,0-2ZM10,5a1,1,0,0,1,1-1h2a1,1,0,0,1,1,1V6H10Zm7,14a1,1,0,0,1-1,1H8a1,1,0,0,1-1-1V8H17Zm-3-1a1,1,0,0,0,1-1V11a1,1,0,0,0-2,0v6A1,1,0,0,0,14,18Z"/>
-                                                                    </svg>
-                                                                </a>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                </#list>
-                                            </#if>
+                                                            <a href="#modal-delete" class="main__table-btn main__table-btn--delete open-modal" data-id="${hall.id}">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                                                    <path d="M10,18a1,1,0,0,0,1-1V11a1,1,0,0,0-2,0v6A1,1,0,0,0,10,18ZM20,6H16V5a3,3,0,0,0-3-3H11A3,3,0,0,0,8,5V6H4A1,1,0,0,0,4,8H5V19a3,3,0,0,0,3,3h8a3,3,0,0,0,3-3V8h1a1,1,0,0,0,0-2ZM10,5a1,1,0,0,1,1-1h2a1,1,0,0,1,1,1V6H10Zm7,14a1,1,0,0,1-1,1H8a1,1,0,0,1-1-1V8H17Zm-3-1a1,1,0,0,0,1-1V11a1,1,0,0,0-2,0v6A1,1,0,0,0,14,18Z"/>
+                                                                </svg>
+                                                            </a>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </#list>
+                                        </#if>
                                         </tbody>
                                     </table>
                                 </div>
@@ -339,6 +315,42 @@
                     </div>
                 </div>
             </#if>
+
+            <#if cinema?? && cinema.gallery?size gt 0>
+                <div class="container-fluid">
+                    <div class="row">
+                        <!-- main title -->
+                        <div class="col-12">
+                            <div class="main__title">
+                                <h2>Gallery</h2>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="row">
+                                <#list cinema.gallery as item>
+                                    <div class="col-12 col-md-5 form__cover">
+                                        <div class="row">
+                                            <form id="img_item_gallery" method="post" action="/admin/cinema/${cinema.id}/image/${item.id}/delete">
+                                                <input type="hidden" value="${_csrf.token}" name="_csrf">
+                                                <button type="submit" class="main__table-btn main__table-btn--delete">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                                        <path d="M10,18a1,1,0,0,0,1-1V11a1,1,0,0,0-2,0v6A1,1,0,0,0,10,18ZM20,6H16V5a3,3,0,0,0-3-3H11A3,3,0,0,0,8,5V6H4A1,1,0,0,0,4,8H5V19a3,3,0,0,0,3,3h8a3,3,0,0,0,3-3V8h1a1,1,0,0,0,0-2ZM10,5a1,1,0,0,1,1-1h2a1,1,0,0,1,1,1V6H10Zm7,14a1,1,0,0,1-1,1H8a1,1,0,0,1-1-1V8H17Zm-3-1a1,1,0,0,0,1-1V11a1,1,0,0,0-2,0v6A1,1,0,0,0,14,18Z"/>
+                                                    </svg>
+                                                </button>
+                                            </form>
+                                            <div class="col-12 col-sm-6 col-md-12">
+                                                <div class="form__img" style="max-height: 300px">
+                                                    <img id="form__img" src="${item.imageUrl}" alt="">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </#list>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </#if>
         </div>
     </div>
 </@c.page>
@@ -360,6 +372,11 @@
         $("#hall_form input[name='numSeats']").val(numSeats);
         $("#hall_form input[name='active']").prop("checked", active);
     }
+
+    $("#modal-hall").on("click", ".modal__btn--dismiss", function (e){
+        console.log("dismiss");
+        clear();
+    });
 
     function clear(){
         var idField = $("#hall_form [name='id']");

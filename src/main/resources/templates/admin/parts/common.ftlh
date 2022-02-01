@@ -11,8 +11,26 @@
         <link rel="stylesheet" href="/static/admin/css/magnific-popup.css">
         <link rel="stylesheet" href="/static/admin/css/select2.min.css">
         <link rel="stylesheet" href="/static/admin/css/admin.css">
+        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
     </head>
     <body>
+    <header class="header">
+        <div class="header__content">
+            <!-- header logo -->
+            <a href="/admin" class="header__logo">
+                <img src="/static/admin/img/logo.svg" alt="">
+            </a>
+            <!-- end header logo -->
+
+            <!-- header menu btn -->
+            <button class="header__btn" type="button">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <!-- end header menu btn -->
+        </div>
+    </header>
     <#include "sidebar.ftlh">
 
     <main class="main">

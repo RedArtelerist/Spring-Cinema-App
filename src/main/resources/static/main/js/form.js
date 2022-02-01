@@ -29,7 +29,6 @@ $(function() {
 	 }
 
 	$('#contact-form').submit(function(e) {
-
 			e.preventDefault();
 			var error = 0;
 			var self = $(this);
@@ -62,8 +61,6 @@ $(function() {
 				error++;
 			}
 
-
-
 			if (error!=0)return;
 			self.find('[type=submit]').attr('disabled', 'disabled');
 
@@ -77,13 +74,11 @@ $(function() {
 	}); // end submit
 
 	$('#forgot-form').submit(function(e) {
-
 			e.preventDefault();
 			var error = 0;
 			var self = $(this);
 
 			var $email = self.find('[type=email]');
-
 
 			var emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
 
@@ -123,8 +118,6 @@ $(function() {
 			error++;
 		}
 
-
-
 		if (error!=0)return;
 		self.find('[type=submit]').attr('disabled', 'disabled');
 
@@ -157,6 +150,46 @@ $(function() {
 
 		self.unbind("submit").submit();
 	});
+
+	$('#contact-info').submit(function(e) {
+		e.preventDefault();
+		var error = 0;
+		var self = $(this);
+
+		var $email = self.find('[type=email]');
+		var $firstName = self.find('[name="firstName"]');
+		var $lastName = self.find('[name="lastName"]');
+		var $phone = self.find('[type=tel]');
+
+		var emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+		var nameRegex = /^[a-zA-Z]{3,20}$/;
+		var phoneRegex = /^\+[0-9]{2}\((\d{3})\)\s\d{3}-\d{2}-\d{2}/;
+
+		if(!emailRegex.test($email.val())) {
+			createErrTult("Error! Wrong email!", $email)
+			error++;
+		}
+
+		if(!nameRegex.test($firstName.val())) {
+			createErrTult("Error! Wrong first name!", $firstName)
+			error++;
+		}
+
+		if(!nameRegex.test($lastName.val())) {
+			createErrTult("Error! Wrong last name!", $lastName)
+			error++;
+		}
+
+		if(!phoneRegex.test($phone.val())) {
+			createErrTult("Error! Wrong phone!", $phone)
+			error++;
+		}
+
+		if (error!=0)
+			return;
+
+		self.unbind("submit").submit();
+	}); // end submit
 
 	function createErrTult(text, $elem){
 		$elem.focus();

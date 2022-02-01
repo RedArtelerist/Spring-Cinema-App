@@ -1,7 +1,9 @@
 <#include "../../parts/security.ftlh">
 
 <div class="sidebar">
-
+    <a href="/admin" class="sidebar__logo">
+        <img src="/static/admin/img/logo.svg" alt="">
+    </a>
     <!-- sidebar user -->
     <div class="sidebar__user">
         <div class="sidebar__user-img">

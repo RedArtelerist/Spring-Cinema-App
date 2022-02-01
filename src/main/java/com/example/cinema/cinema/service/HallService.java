@@ -37,9 +37,13 @@ public class HallService {
         hallRepository.save(hall);
     }
 
-    public void updateHall(Hall currentHall, Hall hall){
+    public void updateHall(Hall currentHall, Hall hall) throws Exception {
+        if(hall.getNumSeats() < currentHall.countSeats())
+            throw new Exception("Can't set less amount of seats then now");
+
         currentHall.setName(hall.getName());
         currentHall.setCinema(hall.getCinema());
+        currentHall.setNumSeats(hall.getNumSeats());
         currentHall.setActive(hall.isActive());
 
         hallRepository.save(currentHall);

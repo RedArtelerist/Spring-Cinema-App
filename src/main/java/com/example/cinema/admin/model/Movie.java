@@ -1,9 +1,11 @@
 package com.example.cinema.admin.model;
 
+import com.example.cinema.cinema.model.Seance;
 import com.example.cinema.main.model.Comment;
 import com.example.cinema.main.model.Favourite;
 import com.example.cinema.main.model.Rating;
 import com.example.cinema.main.model.WatchList;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.Range;
@@ -109,6 +111,10 @@ public class Movie {
     @OneToMany(mappedBy = "movie", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<Comment> comments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "movie", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Seance> seances = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -300,6 +306,14 @@ public class Movie {
 
     public void setComments(List<Comment> comments) {
         this.comments = comments;
+    }
+
+    public List<Seance> getSeances() {
+        return seances;
+    }
+
+    public void setSeances(List<Seance> seances) {
+        this.seances = seances;
     }
 }
 

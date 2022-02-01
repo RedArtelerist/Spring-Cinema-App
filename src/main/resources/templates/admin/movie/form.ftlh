@@ -6,7 +6,14 @@
             <!-- main title -->
             <div class="col-12">
                 <div class="main__title">
-                    <h2>Add new item</h2>
+                    <#if movie?? && movie.id??>
+                        <h2>Edit item</h2>
+                    <#else>
+                        <h2>Add new item</h2>
+                    </#if>
+                    <div class="main__title-wrap">
+                        <a href="/admin/movies" class="main__title-link">all items</a>
+                    </div>
                 </div>
             </div>
             <!-- end main title -->

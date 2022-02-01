@@ -6,7 +6,14 @@
             <!-- main title -->
             <div class="col-12">
                 <div class="main__title">
-                    <h2>Add new company</h2>
+                    <#if company?? && company.id??>
+                        <h2>Edit company</h2>
+                    <#else>
+                        <h2>Add new company</h2>
+                    </#if>
+                    <div class="main__title-wrap">
+                        <a href="/admin/companies" class="main__title-link">all companies</a>
+                    </div>
                 </div>
             </div>
             <!-- end main title -->

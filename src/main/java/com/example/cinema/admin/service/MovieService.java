@@ -86,6 +86,10 @@ public class MovieService {
         return new PageImpl<>(query.subList(start, end), pageable, query.size());
     }
 
+    public List<AdminMovieDto> findByCategory(Category category){
+        return movieRepository.findMovieByCategory(category);
+    }
+
     public Movie getById(Long id){
         Optional<Movie> movieOptional = movieRepository.findById(id);
         return movieOptional.orElse(null);
@@ -93,6 +97,12 @@ public class MovieService {
 
     public MovieDto getById(Long id, User user){
         Optional<MovieDto> movieOptional = movieRepository.findMovie(id, user);
+
+        return movieOptional.orElse(null);
+    }
+
+    public AdminMovieDto getByIdForAdmin(Long id){
+        Optional<AdminMovieDto> movieOptional = movieRepository.findAdminMovie(id);
 
         return movieOptional.orElse(null);
     }

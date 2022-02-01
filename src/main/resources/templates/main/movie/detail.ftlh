@@ -132,6 +132,46 @@
             </div>
 
             <div class="choose-container">
+                <#if cinema_seances??>
+
+                    <h2 class="page-heading">showtime &amp; tickets</h2>
+                    <form id='select' class="select select--city">
+                        <select id="select-city" class="select__sort" tabindex="0">
+                            <#list cities as c>
+                                <option value="${c}" <#if city?? && city == c>selected</#if>>${c}</option>
+                            </#list>
+                        </select>
+                    </form>
+
+                    <form class="select select--date" method='get'>
+                        <input name="city" type="hidden" value="<#if city??>${city}</#if>">
+                        <select id="select-date" name="date" class="select__sort" tabindex="0">
+                            <#list dates as d>
+                                <option <#if date?? && date?string["yyyy-MM-dd"] == d?string["yyyy-MM-dd"]>selected</#if> value="${d?string["yyyy-MM-dd"]}">${d}</option>
+                            </#list>
+                        </select>
+                    </form>
+                    <a href="#" id="map-switch" class="watchlist watchlist--map watchlist--map-full"><span class="show-map">Show cinemas on map</span><span  class="show-time">Show cinema time table</span></a>
+
+                    <div class="clearfix"></div>
+
+                    <div class="time-select">
+                        <#list cinema_seances as cinema, seances>
+                            <div class="time-select__group">
+                                <div class="col-sm-4">
+                                    <p class="time-select__place">${cinema.name}</p>
+                                </div>
+                                <ul class="col-sm-8 items-wrap">
+                                    <#list seances as seance>
+                                        <li class="time-select__item" onclick="location.href='/seance/${seance.id}'">${seance.startTime?string["HH:mm"]}</li>
+                                    </#list>
+                                </ul>
+                            </div>
+                        </#list>
+                    </div>
+                </#if>
+
+
                 <div class="clearfix"></div>
 
                 <h2 class="page-heading">comments (${item.numComments})</h2>
@@ -146,7 +186,6 @@
                             <button type='submit' class="btn btn-md btn--danger comment-form__btn">add comment</button>
                         </form>
                     </#if>
-
 
                     <div class="comment-sets">
                         <#if comments?size gt 10>
@@ -358,17 +397,6 @@
 
         <aside class="col-sm-4 col-md-3">
             <div class="sitebar">
-                <div class="promo marginb-sm">
-                    <div class="promo__head">A.Movie app</div>
-                    <div class="promo__describe">for all smartphones<br> and tablets</div>
-                    <div class="promo__content">
-                        <ul>
-                            <li class="store-variant"><a href="#"><img alt='' src="/static/main/images/apple-store.svg"></a></li>
-                            <li class="store-variant"><a href="#"><img alt='' src="/static/main/images/google-play.svg"></a></li>
-                            <li class="store-variant"><a href="#"><img alt='' src="/static/main/images/windows-store.svg"></a></li>
-                        </ul>
-                    </div>
-                </div>
 
                 <div class="category category--discuss category--count marginb-sm mobile-category ls-cat">
                     <h3 class="category__title">the Most <br><span class="title-edition">discussed posts</span></h3>

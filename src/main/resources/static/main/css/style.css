@@ -5757,6 +5757,7 @@ ul#navigation li.mega-menu__nav-item:hover:before {
 .booking-pagination .booking-pagination__prev:hover {
   color: #ffffff;
   background-color: #fe505a;
+  cursor: pointer;
 }
 .booking-pagination .booking-pagination__prev:hover .arrow__text {
   color: #ffffff;
@@ -5816,7 +5817,7 @@ ul#navigation li.mega-menu__nav-item:hover:before {
   font: 15px "FontAwesome";
   color: #fe505a;
   position: absolute;
-  top: 18px;
+  top: 16px;
   left: -2px;
   -webkit-transition: 0.4s;
   -o-transition: 0.4s;
@@ -5827,7 +5828,7 @@ ul#navigation li.mega-menu__nav-item:hover:before {
   font: 15px "FontAwesome";
   color: #fe505a;
   position: absolute;
-  top: 18px;
+  top: 16px;
   right: -2px;
   -webkit-transition: 0.4s;
   -o-transition: 0.4s;
@@ -5886,6 +5887,24 @@ ul#navigation li.mega-menu__nav-item:hover:before {
   background-color: #ffd564;
   border: solid 3px #fff;
   font: 16px 'Roboto', sans-serif;
+  color: #4c4145;
+  text-align: center;
+  font-weight: bold;
+  position: absolute;
+  top: 6px;
+  left: 6px;
+}
+
+.movie__rating.seance{
+  width: 38px;
+  height: 38px;
+  padding-top: 10px;
+  -webkit-border-radius: 24px;
+  -moz-border-radius: 24px;
+  border-radius: 24px;
+  background-color: #ffd564;
+  border: solid 3px #fff;
+  font: 12px 'Roboto', sans-serif;
   color: #4c4145;
   text-align: center;
   font-weight: bold;
@@ -6750,6 +6769,9 @@ ul#navigation li.mega-menu__nav-item:hover:before {
 .contact-info .contact-info__field-tel:after {
   content: "\f095";
 }
+.contact-info .contact-info__field-name:after {
+  content: "\f007";
+}
 .error {
   margin-top: 240px;
   margin-bottom: 140px;
@@ -7022,6 +7044,7 @@ ul#navigation li.mega-menu__nav-item:hover:before {
   text-align: center;
   margin-top: 70px;
 }
+
 .choose-sits .choose-sits__info {
   display: inline-block;
   font-size: 13px;
@@ -8972,6 +8995,32 @@ ul#navigation li.mega-menu__nav-item:hover:before {
 .select--cinema .sbToggle:after {
   content: 'Cinema';
 }
+.select--city{
+  margin-left: 80px;
+}
+.select--date {
+  margin-left: 80px;
+}
+.select--city .sbToggle {
+  left: -66px;
+}
+.select--city .sbSelector {
+  left: -30px;
+}
+.select--date .sbToggle {
+  left: -66px;
+}
+.select--date .sbSelector {
+  left: -30px;
+}
+.select--date .sbToggle:before {
+  content: "\f073";
+  font-size: 14px;
+  top: 2px;
+}
+.select--date .sbToggle:after {
+  content: 'Date';
+}
 .select--film-category {
   margin-left: 84px;
 }
@@ -10108,9 +10157,7 @@ ul#navigation li.mega-menu__nav-item:hover:before {
   .contact-info .contact-info__field {
     width: auto;
   }
-  .sits-area {
-    width: 950px;
-  }
+
   .sits .sits__number {
     margin-top: 100px;
   }
@@ -10958,9 +11005,11 @@ form .delete-rating:hover {
   opacity: 1;
 }
 
+/*
 * {
   transition: all .32s ease;
 }
+*/
 
 /*filter form*/
 

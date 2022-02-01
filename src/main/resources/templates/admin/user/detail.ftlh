@@ -8,6 +8,9 @@
             <div class="col-12">
                 <div class="main__title">
                     <h2>Edit user</h2>
+                    <div class="main__title-wrap">
+                        <a href="/admin/users" class="main__title-link">all users</a>
+                    </div>
                 </div>
             </div>
             <!-- end main title -->

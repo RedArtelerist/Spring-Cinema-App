@@ -2784,3 +2784,170 @@ button.close {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+/*Hall view*/
+
+.choose-sits {
+  text-align: center;
+  margin-top: 70px;
+  background: white;
+  padding: 50px 0;
+}
+.choose-sits .choose-sits__info {
+  display: inline-block;
+  font-size: 13px;
+  padding: 10px 20px 0 40px;
+  margin-bottom: 52px;
+}
+.choose-sits .choose-sits__info .sits-price {
+  position: relative;
+  display: inline-block;
+  padding: 0 22px;
+}
+.choose-sits .choose-sits__info .sits-price:before {
+  content: '';
+  width: 10px;
+  height: 10px;
+  position: absolute;
+  top: 5px;
+  left: 0;
+}
+.choose-sits .choose-sits__info .marker--none:before {
+  display: none;
+}
+.choose-sits .choose-sits__info .sits-state {
+  position: relative;
+  display: inline-block;
+  padding: 0 25px;
+}
+.choose-sits .choose-sits__info .sits-state:before {
+  content: '';
+  width: 10px;
+  height: 10px;
+  position: absolute;
+  top: 5px;
+  left: 0;
+}
+.sits-area {
+  width: 950px;
+}
+.sits .sits__number {
+  margin-top: 100px;
+}
+.sits-anchor {
+  position: relative;
+  color: #969b9f;
+  font-size: 13px;
+}
+.sits-anchor:before {
+  content: '';
+  background-color: #969b9f;
+  width: 380px;
+  height: 5px;
+  position: absolute;
+  bottom: -9px;
+  left: 50%;
+  margin-left: -190px;
+}
+.sits {
+  position: relative;
+  margin-top: 35px;
+}
+.sits .sits__indecator {
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  margin: 5px;
+  border: 1px solid #4c4145;
+  font-size: 13px;
+  padding-top: 5px;
+}
+.sits .sits__line {
+  width: 30px;
+  position: absolute;
+  top: -1px;
+  left: 0;
+}
+.sits .sits__line__right {
+  position: absolute;
+  top: -1px;
+  right: 0;
+}
+.sits .sits__row {
+  font-size: 0;
+}
+.sits .sits__row .sits__place {
+  position: relative;
+  margin: 5px;
+  width: 30px;
+  height: 30px;
+  display: inline-block;
+  line-height: 30px;
+  font-size: 10px;
+  color: #ffffff;
+  z-index: 13;
+  text-indent: -9999px;
+}
+.sits .sits__row .sits__place:before {
+  content: '';
+  width: 30px;
+  height: 30px;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  z-index: -1;
+}
+.sits .sits__row .sits__place:hover {
+  text-indent: 0;
+  cursor: pointer;
+}
+.sits .sits__row .sits__place:hover:before {
+  background-color: #4c4145;
+}
+.sits .sits__row .sits-state--not:hover {
+  text-indent: -9999px;
+  cursor: auto;
+}
+.sits .sits__row .sits-state--not:hover:before {
+  background-color: #dbdee1;
+}
+.sits .sits__row .sits-state--your {
+  text-indent: -9999px;
+}
+.sits .sits__row .sits-state--your:after {
+  content: "\f00c";
+  font: 13px "FontAwesome";
+  color: #ffffff;
+  position: absolute;
+  top: 7px;
+  left: 9px;
+  z-index: 15;
+  text-indent: 0px;
+}
+.sits .sits__row .sits-state--your:hover {
+  text-indent: -9999px;
+}
+.sits .sits__row .sits-state--your:hover:after {
+  content: "\f00d";
+  left: 10px;
+}
+.sits-price--cheap:before {
+  background-color: #fff0c7;
+}
+.sits-price--middle:before {
+  background-color: #ffc8cb;
+}
+.sits-price--expensive:before {
+  background-color: #cdb4bd;
+}
+.sits-state--not:before {
+  background-color: #dbdee1;
+}
+.sits-state--your:before {
+  background-color: #4c4145;
+}
+@media (min-width: 1200px) {
+  .col-lg-offset-1 {
+    margin-left: 8.33333333%;
+  }
+}

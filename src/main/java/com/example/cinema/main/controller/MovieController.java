@@ -7,6 +7,9 @@ import com.example.cinema.admin.model.Genre;
 import com.example.cinema.admin.model.Movie;
 import com.example.cinema.admin.service.CompanyService;
 import com.example.cinema.admin.service.MovieService;
+import com.example.cinema.cinema.model.City;
+import com.example.cinema.cinema.model.Seance;
+import com.example.cinema.cinema.service.SeanceService;
 import com.example.cinema.main.dto.MovieDto;
 import com.example.cinema.main.model.Comment;
 import com.example.cinema.main.model.Favourite;
@@ -24,10 +27,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 
 @Controller
@@ -41,8 +42,13 @@ public class MovieController {
     @Autowired
     private CommentService commentService;
 
+    @Autowired
+    private SeanceService seanceService;
+
     @GetMapping("/item/{id}")
-    public String detail(@AuthenticationPrincipal User user, @PathVariable Long id, Model model){
+    public String detail(@AuthenticationPrincipal User user, @PathVariable Long id, Model model,
+                         @RequestParam(required = false, defaultValue = "") String city,
+                         @RequestParam(required = false, defaultValue = "") String date){
         MovieDto item = movieService.getById(id, user);
 
         if(item == null)
@@ -59,6 +65,58 @@ public class MovieController {
 
         model.addAttribute("item", item);
         model.addAttribute("comments", commentService.movieComments(id));
+
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        Date d;
+        try {
+            d = formatter.parse(date);
+        }
+        catch (Exception ex){
+            d = null;
+        }
+
+        City c;
+        try {
+            c = City.valueOf(city);
+        }
+        catch (Exception ex){
+            c = null;
+        }
+
+        var cities = seanceService.getCitiesByMovie(item.getId());
+        if(cities.size() > 0){
+            model.addAttribute("cities", cities);
+            List<Date> dates;
+            if(c != null)
+                dates = seanceService.getDatesByMovie(item.getId(), c);
+            else
+                dates = seanceService.getDatesByMovie(item.getId(), cities.get(0));
+            if(dates.size() > 0){
+                model.addAttribute("dates", dates);
+                if(c != null && d != null && dates.contains(d)) {
+                    model.addAttribute("city", c);
+                    model.addAttribute("date", d);
+                    model.addAttribute("cinema_seances",
+                            seanceService.findSeancesByMovie(item.getId(), c, d)
+                    );
+                } else if(c != null){
+                    model.addAttribute("city", c);
+                    model.addAttribute("cinema_seances",
+                            seanceService.findSeancesByMovie(item.getId(), c, dates.get(0))
+                    );
+                } else if(d != null && dates.contains(d)){
+                    model.addAttribute("date", d);
+                    model.addAttribute("cinema_seances",
+                            seanceService.findSeancesByMovie(item.getId(), cities.get(0), d)
+                    );
+                }
+                else {
+                    model.addAttribute("cinema_seances",
+                            seanceService.findSeancesByMovie(item.getId(), cities.get(0), dates.get(0))
+                    );
+                }
+            }
+        }
         return "main/movie/detail";
     }
 

@@ -188,8 +188,7 @@ public class AdminCinemaController {
             redirect.addFlashAttribute("hallActive", hall.isActive());
 
             return "redirect:/admin/cinema/" + cinemaId + "/edit";
-        }
-        else {
+        } else {
             if(hall.getId() != null){
                 Hall editHall = hallService.getById(hall.getId());
                 if(editHall == null){
@@ -197,7 +196,17 @@ public class AdminCinemaController {
                     redirect.addFlashAttribute("message", "Hall not found");
                     return "redirect:/admin/cinema/" + cinemaId + "/edit";
                 }
-                hallService.updateHall(editHall, hall);
+                try {
+                    hallService.updateHall(editHall, hall);
+                }
+                catch (Exception ex){
+                    redirect.addFlashAttribute("numSeatsError", ex.getMessage());
+                    redirect.addFlashAttribute("hallId", hall.getId());
+                    redirect.addFlashAttribute("hallName", hall.getName());
+                    redirect.addFlashAttribute("hallNum", hall.getNumSeats());
+                    redirect.addFlashAttribute("hallActive", hall.isActive());
+                    return "redirect:/admin/cinema/" + cinemaId + "/edit";
+                }
             } else
                 hallService.saveHall(hall);
 
@@ -205,23 +214,17 @@ public class AdminCinemaController {
         }
     }
 
-    @PostMapping("cinema/{cinemaId}/hall/{id}/delete")
-    public String deleteHall(@PathVariable Long cinemaId, @PathVariable Long id, RedirectAttributes redirect){
-        Cinema cinema = cinemaService.getById(cinemaId);
-
-        if(cinema == null){
-            redirect.addFlashAttribute("messageType", "error");
-            redirect.addFlashAttribute("message", "Cinema not found");
-            return "redirect:/admin/cinemas";
-        }
-
+    @PostMapping("/hall/{id}/delete")
+    public String deleteHall(@PathVariable Long id, RedirectAttributes redirect){
         Hall hall = hallService.getById(id);
 
         if(hall == null){
             redirect.addFlashAttribute("messageType", "error");
             redirect.addFlashAttribute("message", "Hall not found");
-            return "redirect:/admin/cinema/" + cinemaId + "/edit";
+            return "redirect:/admin/cinemas";
         }
+
+        Long cinemaId = hall.getCinema().getId();
 
         hallService.delete(hall);
 

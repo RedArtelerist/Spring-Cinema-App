@@ -39,6 +39,15 @@ public interface MovieRepository extends JpaRepository<Movie, Long> {
             "order by avg(r.value) desc ")
     Page<AdminMovieDto> findMoviesForAdminOrderByRating(String search, Pageable pageable);
 
+    @Query("select new com.example.cinema.admin.dto.AdminMovieDto(" +
+            "   m," +
+            "   avg(r.value)" +
+            ") " +
+            "from Movie m left join m.ratings r " +
+            "where m.category = :category " +
+            "group by m order by m.title asc")
+    List<AdminMovieDto> findMovieByCategory(Category category);
+
     @Query("select new com.example.cinema.main.dto.MovieDto(" +
             "   m," +
             "   avg(r.value), " +
@@ -50,6 +59,15 @@ public interface MovieRepository extends JpaRepository<Movie, Long> {
             "where m.id = :id " +
             "group by m")
     Optional<MovieDto> findMovie(@Param("id") Long id, @Param("user") User user);
+
+    @Query("select new com.example.cinema.admin.dto.AdminMovieDto(" +
+            "   m," +
+            "   avg(r.value) " +
+            ") " +
+            "from Movie m left join m.ratings r " +
+            "where m.id = :id " +
+            "group by m")
+    Optional<AdminMovieDto> findAdminMovie(@Param("id") Long id);
 
     @Query("select new com.example.cinema.main.dto.MovieDto(" +
             "   m," +

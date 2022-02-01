@@ -6,7 +6,14 @@
             <!-- main title -->
             <div class="col-12">
                 <div class="main__title">
-                    <h2>Add new star</h2>
+                    <#if star?? && star.id??>
+                        <h2>Edit star</h2>
+                    <#else>
+                        <h2>Add new star</h2>
+                    </#if>
+                    <div class="main__title-wrap">
+                        <a href="/admin/stars" class="main__title-link">all stars</a>
+                    </div>
                 </div>
             </div>
             <!-- end main title -->

@@ -42,262 +42,86 @@
                 <div class="tab-pane active" id="movie1">
                     <div class="container">
                         <div class="movie-time-wrap">
-
-                            <div class="datepicker">
-                                <span class="datepicker__marker"><i class="fa fa-calendar"></i>Date</span>
-                                <input type="text" id="datepicker" value='03/10/2014' class="datepicker__input">
-                            </div>
+                            <#if dates?has_content>
+                                <div class="col-sm-6">
+                                    <form class="select select--date" method='get'>
+                                        <select name="date" class="select__sort" tabindex="0">
+                                            <#list dates as d>
+                                                <option <#if date?? && date?string["yyyy-MM-dd"] == d?string["yyyy-MM-dd"]>selected</#if> value="${d?string["yyyy-MM-dd"]}">${d}</option>
+                                            </#list>
+                                        </select>
+                                    </form>
+                                </div>
+                            </#if>
 
                             <div class="clearfix"></div>
 
-                            <div class="col-sm-6">
-                                <!-- Movie variant with time -->
-                                <div class="movie movie--time">
-                                    <div class="row">
-                                        <div class="col-sm-6 col-md-5">
-                                            <div class="movie__images">
-                                                <span class="movie__rating">4.1</span>
-                                                <img alt='' src="https://firebasestorage.googleapis.com/v0/b/spring-project-31341.appspot.com/o/cinemas%2Fdefault.png?alt=media">
+                            <#list movie_seances as item>
+                                <div class="col-sm-6">
+                                    <!-- Movie variant with time -->
+                                    <div class="movie movie--time">
+                                        <div class="row">
+                                            <div class="col-sm-6 col-md-5">
+                                                <div class="movie__images">
+                                                    <#if item.movie.rating??>
+                                                        <span class="movie__rating">${item.movie.rating}</span>
+                                                    </#if>
+                                                    <img alt='' src="${item.movie.posterUrl}" style="height: 285px">
+
+                                                    <#if name != "unknown">
+                                                        <div class="item_watchlist" style="position: absolute; top: 6px; right: 10px;">
+                                                            <a onclick="watchlist(this, ${item.movie.id})" style="font-size: 30px">
+                                                                <#if item.movie.inWatchlist>
+                                                                    <i class="fas fa-bookmark"></i>
+                                                                <#else>
+                                                                    <i class="far fa-bookmark"></i>
+                                                                </#if>
+                                                            </a>
+                                                        </div>
+                                                    </#if>
+                                                </div>
                                             </div>
-                                        </div>
 
-                                        <div class="col-sm-6 col-md-7">
-                                            <a href='movie-page-left.html' class="movie__title">Gravity (2013) </a>
+                                            <div class="col-sm-6 col-md-7" style="padding-left: 2px">
+                                                <a href='/item/${item.movie.id}' style="padding-top: 0" class="movie__title">${item.movie.title} (${item.movie.year?c}) </a>
 
-                                            <p class="movie__time">91 min</p>
+                                                <p class="movie__time">${item.movie.time} min</p>
 
-                                            <p class="movie__option"><a href="#">Drama</a> | <a href="#">Sci-Fi</a> | <a href="#">Thriller</a></p>
-                                        </div>
-                                        <div class="time-select">
-                                            <ul class="items-wrap">
-                                                <li class="time-select__item" data-time='09:40'>09:40</li>
-                                                <li class="time-select__item" data-time='13:45'>13:45</li>
-                                                <li class="time-select__item" data-time='15:45'>15:45</li>
-                                                <li class="time-select__item" data-time='19:50'>19:50</li>
-                                                <li class="time-select__item" data-time='21:50'>21:50</li>
-                                            </ul>
-                                        </div>
-
-                                    </div>
-                                </div>
-                                <!-- Movie variant with time -->
-                            </div>
-
-                            <div class="col-sm-6">
-
-                                <!-- Movie variant with time -->
-                                <div class="movie movie--time">
-                                    <div class="row">
-                                        <div class="col-sm-6 col-md-5">
-                                            <div class="movie__images">
-                                                <span class="movie__rating">5.0</span>
-                                                <img alt='' src="https://firebasestorage.googleapis.com/v0/b/spring-project-31341.appspot.com/o/cinemas%2Fdefault.png?alt=media">
+                                                <p class="movie__option"><strong>Genres: </strong>
+                                                    <#list item.movie.genres as genre>
+                                                        <a href="/navigator?genre=${genre}">${genre}</a><#sep>, </#sep>
+                                                    </#list>
+                                                </p>
+                                                <p class="movie__option"><strong>Release date: </strong>${item.movie.release?string["dd.MM.yyyy"]}</p>
+                                                <p class="movie__option"><strong>Directors: </strong>
+                                                    <#list item.movie.directors as director>
+                                                        <a href="/star/${director.id}">${director.fullName()}</a><#sep>, </#sep>
+                                                    </#list>
+                                                </p>
+                                                <p class="movie__option"><strong>Actors: </strong>
+                                                    <#list item.movie.cast as actor>
+                                                        <a href="/star/${actor.id}">${actor.fullName()}</a><#sep>, </#sep>
+                                                    </#list>
+                                                </p>
+                                                <p class="movie__option"><strong>Age restriction: </strong>
+                                                    <a href="#">${item.movie.mpaa.getLabel()}</a>
+                                                </p>
                                             </div>
-                                        </div>
-
-                                        <div class="col-sm-6 col-md-7">
-                                            <a href='movie-page-left.html' class="movie__title">The Hobbit:  The Desolation of Smaug (2013) </a>
-
-                                            <p class="movie__time">169 min</p>
-
-                                            <p class="movie__option"><a href="#">Adventure</a> | <a href="#">Fantazy</a> | <a href="#">Drama</a></p>
-                                        </div>
-
-                                        <div class="time-select">
-                                            <ul class="items-wrap">
-                                                <li class="time-select__item" data-time='09:40'>09:40</li>
-                                                <li class="time-select__item" data-time='13:45'>13:45</li>
-                                                <li class="time-select__item" data-time='15:45'>15:45</li>
-                                                <li class="time-select__item" data-time='19:50'>19:50</li>
-                                            </ul>
-                                        </div>
-
-                                    </div>
-                                </div>
-                                <!-- Movie variant with time -->
-                            </div>
-
-                            <div class="clearfix"></div>
-
-                            <div class="col-sm-6">
-
-                                <!-- Movie variant with time -->
-                                <div class="movie movie--time">
-                                    <div class="row">
-                                        <div class="col-sm-6 col-md-5">
-                                            <div class="movie__images">
-                                                <span class="movie__rating">4.9</span>
-                                                <img alt='' src="https://firebasestorage.googleapis.com/v0/b/spring-project-31341.appspot.com/o/cinemas%2Fdefault.png?alt=media">
+                                            <div class="time-select">
+                                                <ul class="items-wrap">
+                                                    <#list item.seances as seance>
+                                                        <li class="time-select__item" onclick="location.href='/seance/${seance.id}'">
+                                                            ${seance.startTime?string["HH:mm"]}
+                                                        </li>
+                                                    </#list>
+                                                </ul>
                                             </div>
+
                                         </div>
-
-                                        <div class="col-sm-6 col-md-7">
-                                            <a href='movie-page-left.html' class="movie__title">The Hunger Games:  Catching Fire (2013)</a>
-
-                                            <p class="movie__time">149 min</p>
-
-                                            <p class="movie__option"><a href="#">Adventure</a> | <a href="#">Action</a> | <a href="#">Sci-Fi</a></p>
-                                        </div>
-
-                                        <div class="time-select">
-                                            <ul class="items-wrap">
-                                                <li class="time-select__item" data-time='09:40'>09:40</li>
-                                                <li class="time-select__item" data-time='13:45'>13:45</li>
-                                                <li class="time-select__item" data-time='15:45'>15:45</li>
-                                                <li class="time-select__item" data-time='19:50'>19:50</li>
-                                                <li class="time-select__item" data-time='21:50'>21:50</li>
-                                            </ul>
-                                        </div>
-
                                     </div>
+                                    <!-- Movie variant with time -->
                                 </div>
-                                <!-- Movie variant with time -->
-                            </div>
-
-                            <div class="col-sm-6">
-
-                                <!-- Movie variant with time -->
-                                <div class="movie movie--time">
-                                    <div class="row">
-                                        <div class="col-sm-6 col-md-5">
-                                            <div class="movie__images">
-                                                <span class="movie__rating">4.9</span>
-                                                <img alt='' src="https://firebasestorage.googleapis.com/v0/b/spring-project-31341.appspot.com/o/cinemas%2Fdefault.png?alt=media">
-                                            </div>
-                                        </div>
-
-                                        <div class="col-sm-6 col-md-7">
-                                            <a href='movie-page-left.html' class="movie__title">Thor: The Dark World  (2013) </a>
-
-                                            <p class="movie__time">112 min</p>
-
-                                            <p class="movie__option"><a href="#">Action</a> | <a href="#">Adventure</a> | <a href="#">Fantazy</a></p>
-                                        </div>
-
-                                        <div class="time-select">
-                                            <ul class="items-wrap">
-                                                <li class="time-select__item" data-time='09:40'>09:40</li>
-                                                <li class="time-select__item" data-time='13:45'>13:45</li>
-                                                <li class="time-select__item" data-time='15:45'>15:45</li>
-                                                <li class="time-select__item" data-time='19:50'>19:50</li>
-                                                <li class="time-select__item" data-time='21:50'>21:50</li>
-                                            </ul>
-                                        </div>
-
-                                    </div>
-                                </div>
-                                <!-- Movie variant with time -->
-                            </div>
-
-                            <div class="clearfix"></div>
-
-                            <div class="col-sm-6">
-
-                                <!-- Movie variant with time -->
-                                <div class="movie movie--time">
-                                    <div class="row">
-                                        <div class="col-sm-6 col-md-5">
-                                            <div class="movie__images">
-                                                <span class="movie__rating">4.1</span>
-                                                <img alt='' src="https://firebasestorage.googleapis.com/v0/b/spring-project-31341.appspot.com/o/cinemas%2Fdefault.png?alt=media">
-                                            </div>
-                                        </div>
-
-                                        <div class="col-sm-6 col-md-7">
-                                            <a href='movie-page-left.html' class="movie__title">World War Z (2013) </a>
-
-                                            <p class="movie__time">116 min</p>
-
-                                            <p class="movie__option"><a href="#">Adventure</a> | <a href="#">Horror</a> | <a href="#">Action</a></p>
-                                        </div>
-
-                                        <div class="time-select">
-                                            <ul class="items-wrap">
-                                                <li class="time-select__item" data-time='09:40'>09:40</li>
-                                                <li class="time-select__item" data-time='13:45'>13:45</li>
-                                                <li class="time-select__item" data-time='15:45'>15:45</li>
-                                                <li class="time-select__item" data-time='19:50'>19:50</li>
-                                                <li class="time-select__item" data-time='21:50'>21:50</li>
-                                            </ul>
-                                        </div>
-
-                                    </div>
-                                </div>
-                                <!-- Movie variant with time -->
-                            </div>
-
-                            <div class="col-sm-6">
-
-                                <!-- Movie variant with time -->
-                                <div class="movie movie--time">
-                                    <div class="row">
-                                        <div class="col-sm-6 col-md-5">
-                                            <div class="movie__images">
-                                                <span class="movie__rating">4.9</span>
-                                                <img alt='' src="https://firebasestorage.googleapis.com/v0/b/spring-project-31341.appspot.com/o/cinemas%2Fdefault.png?alt=media">
-                                            </div>
-                                        </div>
-
-                                        <div class="col-sm-6 col-md-7">
-                                            <a href='movie-page-left.html' class="movie__title">Prisoners (2013) </a>
-
-                                            <p class="movie__time">153 min</p>
-
-                                            <p class="movie__option"><a href="#">Crime</a> | <a href="#">Thriller</a> | <a href="#">Drama</a></p>
-                                        </div>
-
-                                        <div class="time-select">
-                                            <ul class="items-wrap">
-                                                <li class="time-select__item" data-time='09:40'>09:40</li>
-                                                <li class="time-select__item" data-time='13:45'>13:45</li>
-                                                <li class="time-select__item" data-time='15:45'>15:45</li>
-                                                <li class="time-select__item" data-time='19:50'>19:50</li>
-                                                <li class="time-select__item" data-time='21:50'>21:50</li>
-                                            </ul>
-                                        </div>
-
-                                    </div>
-                                </div>
-                                <!-- Movie variant with time -->
-                            </div>
-
-                            <div class="clearfix"></div>
-
-                            <div class="col-sm-6">
-
-                                <!-- Movie variant with time -->
-                                <div class="movie movie--time">
-                                    <div class="row">
-                                        <div class="col-sm-6 col-md-5">
-                                            <div class="movie__images">
-                                                <span class="movie__rating">4.6</span>
-                                                <img alt='' src="https://firebasestorage.googleapis.com/v0/b/spring-project-31341.appspot.com/o/cinemas%2Fdefault.png?alt=media">
-                                            </div>
-                                        </div>
-
-                                        <div class="col-sm-6 col-md-7">
-                                            <a href='movie-page-left.html' class="movie__title">This Is the End (2013)  </a>
-
-                                            <p class="movie__time">107 min</p>
-
-                                            <p class="movie__option"><a href="#">Comedy</a> | <a href="#">Fantazy</a></p>
-                                        </div>
-
-                                        <div class="time-select">
-                                            <ul class="items-wrap">
-                                                <li class="time-select__item" data-time='09:40'>09:40</li>
-                                                <li class="time-select__item" data-time='13:45'>13:45</li>
-                                                <li class="time-select__item" data-time='15:45'>15:45</li>
-                                                <li class="time-select__item" data-time='19:50'>19:50</li>
-                                                <li class="time-select__item" data-time='21:50'>21:50</li>
-                                            </ul>
-                                        </div>
-
-                                    </div>
-                                </div>
-                                <!-- Movie variant with time -->
-                            </div>
-
+                            </#list>
                         </div>
                     </div>
                 </div>
@@ -448,5 +272,36 @@
             init_Home();
             init_Cinema();
         });
+        <#if name != "unknown">
+        function watchlist(e, itemId){
+            $.post({
+                url: '/watchlist',
+                data: JSON.stringify(itemId),
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '${_csrf.token}'
+                },
+                success: function (data, status) {
+                    if (status === 'success') {
+                        if(data == 0) {
+                            $(e).find("i").removeClass("fas fa-bookmark");
+                            $(e).find("i").addClass("far fa-bookmark");
+                            console.log("Item was removed from watchlist");
+                        }
+                        else {
+                            $(e).find("i").removeClass("far fa-bookmark");
+                            $(e).find("i").addClass("fas fa-bookmark");
+                            console.log("Item was added to watchlist");
+                        }
+                    }
+                },
+                error: function (error) {
+                    var err = error.responseJSON.message;
+                    alert(err);
+                    location.reload();
+                }
+            });
+        }
+        </#if>
     </script>
 </@c.page>
