@@ -2,26 +2,22 @@
     <section class="container">
         <div class="col-xs-4 col-md-2 footer-nav">
             <ul class="nav-link">
-                <li><a href="#" class="nav-link__item">Cities</a></li>
-                <li><a href="movie-list-left.html" class="nav-link__item">Movies</a></li>
-                <li><a href="trailer.html" class="nav-link__item">Trailers</a></li>
-                <li><a href="rates-left.html" class="nav-link__item">Rates</a></li>
+                <li><a href="/navigator?category=Movie" class="nav-link__item">Movies</a></li>
+                <li><a href="/navigator?category=TVShow" class="nav-link__item">TV Shows</a></li>
+                <li><a href="/trailers" class="nav-link__item">Trailers</a></li>
             </ul>
         </div>
         <div class="col-xs-4 col-md-2 footer-nav">
             <ul class="nav-link">
-                <li><a href="coming-soon.html" class="nav-link__item">Coming soon</a></li>
-                <li><a href="cinema-list.html" class="nav-link__item">Cinemas</a></li>
-                <li><a href="offers.html" class="nav-link__item">Best offers</a></li>
-                <li><a href="news-left.html" class="nav-link__item">News</a></li>
+                <li><a href="/navigator?sort=coming" class="nav-link__item">Coming soon</a></li>
+                <li><a href="/cinemas" class="nav-link__item">Cinemas</a></li>
+                <li><a href="/news" class="nav-link__item">News</a></li>
             </ul>
         </div>
         <div class="col-xs-4 col-md-2 footer-nav">
             <ul class="nav-link">
-                <li><a href="#" class="nav-link__item">Terms of use</a></li>
-                <li><a href="gallery-four.html" class="nav-link__item">Gallery</a></li>
-                <li><a href="contact.html" class="nav-link__item">Contacts</a></li>
-                <li><a href="page-elements.html" class="nav-link__item">Shortcodes</a></li>
+                <li><a href="/term" class="nav-link__item">Terms of use</a></li>
+                <li><a href="/contact-us" class="nav-link__item">Contacts</a></li>
             </ul>
         </div>
         <div class="col-xs-12 col-md-6">
@@ -38,7 +34,7 @@
                 </div>
 
                 <div class="clearfix"></div>
-                <p class="copy">&copy; A.Movie, 2013. All rights reserved. Done by Olia Gozha</p>
+                <p class="copy">&copy; A.Movie, 2022. All rights reserved.</p>
             </div>
         </div>
     </section>

@@ -6,7 +6,9 @@ import com.example.cinema.account.model.Gender;
 import com.example.cinema.account.model.User;
 import com.example.cinema.account.service.ProfileService;
 import com.example.cinema.account.service.UserService;
+import com.example.cinema.cinema.service.TicketService;
 import com.example.cinema.utils.ControllerUtils;
+import org.dom4j.rule.Mode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -27,6 +29,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.util.Date;
 import java.util.Map;
 
 @Controller
@@ -36,6 +39,9 @@ public class ProfileController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private TicketService ticketService;
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/profile")
@@ -169,5 +175,53 @@ public class ProfileController {
 
         profileService.unsubscribe(currentUser, user);
         return "redirect:/user/" + user.getId();
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/tickets")
+    public String tickets(
+            @AuthenticationPrincipal User user, Model model,
+            @RequestParam(required = false, defaultValue = "1") int page
+    ){
+        var tickets = ticketService.ticketsByUser(user, page);
+        model.addAttribute("page", tickets);
+        model.addAttribute("url", "/tickets");
+        return "main/user/tickets";
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/ticket/{id}")
+    public String ticketDetail(
+            @AuthenticationPrincipal User user, @PathVariable String id, Model model
+    ){
+        var ticket = ticketService.getByNumber(id);
+        if(ticket == null)
+            throw new RuntimeException("Ticket not found");
+
+        if(!ticket.getUser().getId().equals(user.getId()))
+            throw new RuntimeException("User not found");
+
+        model.addAttribute("ticket", ticket);
+        model.addAttribute("title", "myTicket");
+
+        return "main/cinema/ticket";
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/ticket/{id}/delete")
+    public String deleteTicket(@AuthenticationPrincipal User user, @PathVariable String id){
+        var ticket = ticketService.getByNumber(id);
+        if(ticket == null)
+            return "redirect:/tickets";
+
+        if(!ticket.getUser().getId().equals(user.getId()))
+            return "redirect:/tickets";
+
+        if(ticket.getDate().before(new Date(System.currentTimeMillis() + 3600 * 1000)))
+            return "redirect:/tickets";
+
+        ticketService.removeTicket(ticket);
+
+        return "redirect:/tickets";
     }
 }

@@ -23,7 +23,18 @@ public interface StarRepository extends JpaRepository<Star, Long> {
     @Query("SELECT s FROM Star s WHERE lower(s.firstName) LIKE %?1%"
             + " OR lower(s.firstName) LIKE %?1%"
             + " OR lower(s.lastName) LIKE %?1%"
-            + " OR lower(s.birthPlace) LIKE %?1%"
-    )
+            + " OR lower(s.birthPlace) LIKE %?1%")
     Page<Star> search(String search, Pageable pageable);
+
+    @Query("select s from Star s where lower(s.firstName) like %:key% or lower(s.lastName) like %:key%")
+    Page<Star> findBySearch(@Param("key") String search, Pageable pageable);
+
+    @Query("select s from Star s left join s.actor_movies am left join s.director_movies dm " +
+            "where lower(s.firstName) like %:key% or lower(s.lastName) like %:key% " +
+            "group by s order by (count(am) + count(dm)) desc")
+    Page<Star> sortByPopularity(@Param("key") String search, Pageable pageable);
+
+    @Query("select s from Star s left join s.actor_movies am left join s.director_movies dm " +
+            "group by s order by (count(am) + count(dm)) desc")
+    Page<Star> sortByPopularity(Pageable pageable);
 }

@@ -2,6 +2,7 @@ package com.example.cinema.admin.controller;
 
 import com.example.cinema.account.service.UserService;
 import com.example.cinema.admin.service.MovieService;
+import com.example.cinema.cinema.service.TicketService;
 import com.example.cinema.main.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -9,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.Date;
 import java.util.stream.Collectors;
 
 @RequestMapping("/admin")
@@ -22,6 +24,9 @@ public class AdminMainController {
 
     @Autowired
     private CommentService commentService;
+
+    @Autowired
+    private TicketService ticketService;
 
     @GetMapping()
     public String dashboard(Model model){
@@ -46,6 +51,7 @@ public class AdminMainController {
         model.addAttribute("usersCount", userService.userList().size());
         model.addAttribute("itemsCount", movieService.movieList().size());
         model.addAttribute("commentsCount", commentService.commentList().size());
+        model.addAttribute("ticketsCount", ticketService.ticketsByDate(new Date()).size());
 
         return "admin/dashboard";
     }

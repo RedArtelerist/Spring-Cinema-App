@@ -3,64 +3,62 @@
 
 
 <@c.page>
+    <link href='http://fonts.googleapis.com/css?family=PT+Mono' rel='stylesheet' type='text/css'>
+
     <#include "../../parts/search.ftlh">
 
     <!-- Main content -->
+
     <section class="container">
+        <div class="order-container">
+            <div class="order">
+                <img class="order__images" alt='' src="/static/main/images/tickets.png">
+                <#if title?? && title == "myTicket">
+                    <p class="order__title"></p>
+                    <a href="/tickets" class="btn btn-md btn--warning">view all tickets</a>
+                <#else>
+                    <p class="order__title">Thank you <br><span class="order__descript">you have successfully purchased tickets</span></p>
+                    <a href="/cinema/${ticket.hall.cinema.id}" class="btn btn-md btn--warning">return to cinema</a>
+                </#if>
 
-        <div class="col-sm-12">
-            <h2 class="page-heading">cinemas</h2>
+            </div>
 
-            <div class="tags-area tags-area--thin">
-                <form id='select' class="select">
-                    <select name="city" id="select-sort" class="select__sort" tabindex="0">
-                        <option value="all" <#if city?? == false>selected</#if>>All</option>
-                        <#list cities as item>
-                            <option value="${item}" <#if city == item>selected</#if>>${item}</option>
-                        </#list>
-                    </select>
-                    <input type="hidden" name="sort" value="${sort}">
-                </form>
+            <div class="ticket">
+                <div class="ticket-position">
+                    <div class="ticket__indecator indecator--pre"><div class="indecator-text pre--text">online ticket</div> </div>
+                    <div class="ticket__inner">
 
-                <div class="tags tags--unmarked tags--aside">
-                    <span class="tags__label">Sorted by:</span>
-                    <ul>
-                        <li class="item-wrap">
-                            <a href="#" class="tags__item <#if sort != 'rating'>item-active</#if>" data-filter='name'>name</a>
-                        </li>
-                        <li class="item-wrap">
-                            <a href="#" class="tags__item <#if sort == 'rating'>item-active</#if>" data-filter='rating'>rating</a>
-                        </li>
-                    </ul>
+                        <div class="ticket-secondary">
+                            <span class="ticket__item">Ticket number <strong class="ticket__number">${ticket.number}</strong></span>
+                            <span class="ticket__item ticket__date">${ticket.date?string["dd/MM/yyyy"]}</span>
+                            <span class="ticket__item ticket__time">${ticket.date?string["HH:mm"]}</span>
+                            <span class="ticket__item">Cinema: <span class="ticket__cinema">${ticket.hall.cinema.name}</span></span>
+                            <span class="ticket__item">Hall: <span class="ticket__hall">${ticket.hall.name}</span></span>
+                            <span class="ticket__item ticket__price">price: <strong class="ticket__cost">₴${ticket.price?c}</strong></span>
+                        </div>
+
+                        <div class="ticket-primery">
+                            <span class="ticket__item ticket__item--primery ticket__film">Film<br><strong class="ticket__movie">${ticket.movie.title}</strong></span>
+                            <span class="ticket__item ticket__item--primery">Sits: <span class="ticket__place">${ticket.seats}</span></span>
+                        </div>
+
+
+                    </div>
+                    <div class="ticket__indecator indecator--post"><div class="indecator-text post--text">online ticket</div></div>
                 </div>
             </div>
 
-            <div class="cinema-wrap">
-                <div class="row">
-                    <#if cinemas?size gt 0>
-                        <#list cinemas as cinema>
-                            <div class="col-xs-6 col-sm-3 cinema-item">
-                                <div class="cinema">
-                                    <a href='/cinema/${cinema.id}' class="cinema__images">
-                                        <img alt='' src="${cinema.imageUrl}">
-                                        <span class="cinema-rating">${cinema.rating}</span>
-                                    </a>
-                                    <a href="/cinema/${cinema.id}" class="cinema-title">${cinema.name}</a>
-                                </div>
-                            </div>
-                        </#list>
-                    <#else>
-                        <h1 style="margin: 100px 0;text-align: center">No cinemas</h1>
-                    </#if>
-                </div>
-
+            <div class="ticket-control">
+                <a href="#" class="watchlist list--download">Download</a>
+                <a href="#" class="watchlist list--print">Print</a>
             </div>
 
         </div>
-
     </section>
 
+
     <div class="clearfix"></div>
+
 
     <!-- JavaScript-->
     <!-- jQuery 3.1.1-->
@@ -102,14 +100,15 @@
 
     <!-- Form element -->
     <script src="/static/main/js/external/form-element.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/3.1.62/jquery.inputmask.bundle.js"></script>
 
     <!-- Custom -->
     <script src="/static/main/js/custom.js"></script>
+    <script src="/static/main/js/form.js"></script>
 
-    <script type="text/javascript">
+    <script>
         $(document).ready(function() {
             init_Home();
-            init_CinemaList();
         });
     </script>
 </@c.page>

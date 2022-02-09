@@ -157,11 +157,11 @@
                 <div class="coloum-wrapper">
                     <div class="pagination paginatioon--full">
                         <#if page.hasPrevious()>
-                            <a href='${url}?page=${page.getNumber()}<#if sort?has_content>&sort=${sort}</#if><#if category?has_content>&category=${category}</#if><#if company??>&company=${company}</#if><#if genre?has_content>&genre=${genre}</#if><#if country?has_content>&country=${country}</#if><#if from_year?has_content>&from_year=${from_year?c}</#if><#if to_year?has_content>&to_year=${to_year?c}</#if>' class="pagination__prev">prev</a>
+                            <a href='${url}?page=${page.getNumber()}<#if sort?has_content>&sort=${sort}</#if><#if search?has_content>&search=${sort}</#if><#if category?has_content>&category=${category}</#if><#if company??>&company=${company}</#if><#if genre?has_content>&genre=${genre}</#if><#if country?has_content>&country=${country}</#if><#if from_year?has_content>&from_year=${from_year?c}</#if><#if to_year?has_content>&to_year=${to_year?c}</#if>' class="pagination__prev">prev</a>
                         </#if>
 
                         <#if page.hasNext()>
-                            <a href='${url}?page=${page.getNumber() + 2}<#if sort?has_content>&sort=${sort}</#if><#if category?has_content>&category=${category}</#if><#if company??>&company=${company}</#if><#if genre?has_content>&genre=${genre}</#if><#if country?has_content>&country=${country}</#if><#if from_year?has_content>&from_year=${from_year?c}</#if><#if to_year?has_content>&to_year=${to_year?c}</#if>' class="pagination__next">next</a>
+                            <a href='${url}?page=${page.getNumber() + 2}<#if sort?has_content>&sort=${sort}</#if><#if search?has_content>&search=${sort}</#if><#if category?has_content>&category=${category}</#if><#if company??>&company=${company}</#if><#if genre?has_content>&genre=${genre}</#if><#if country?has_content>&country=${country}</#if><#if from_year?has_content>&from_year=${from_year?c}</#if><#if to_year?has_content>&to_year=${to_year?c}</#if>' class="pagination__next">next</a>
                         </#if>
                     </div>
                 </div>
@@ -244,18 +244,6 @@
                             </div>
                         </div>
                     </form>
-                </div>
-
-                <div class="promo marginb-sm">
-                    <div class="promo__head">A.Movie app</div>
-                    <div class="promo__describe">for all smartphones<br> and tablets</div>
-                    <div class="promo__content">
-                        <ul>
-                            <li class="store-variant"><a href="#"><img alt='' src="/static/main/images/apple-store.svg"></a></li>
-                            <li class="store-variant"><a href="#"><img alt='' src="/static/main/images/google-play.svg"></a></li>
-                            <li class="store-variant"><a href="#"><img alt='' src="/static/main/images/windows-store.svg"></a></li>
-                        </ul>
-                    </div>
                 </div>
 
                 <div class="category category--discuss category--count marginb-sm mobile-category ls-cat">

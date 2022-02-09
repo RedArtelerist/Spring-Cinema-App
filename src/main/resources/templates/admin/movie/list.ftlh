@@ -71,7 +71,7 @@
                             <th>Votes</th>
                             <th>Category</th>
                             <th>Comments</th>
-                            <th>STATUS</th>
+                            <th>Status</th>
                             <th>Release</th>
                         </tr>
                         </thead>

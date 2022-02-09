@@ -1,6 +1,7 @@
 package com.example.cinema.cinema.repository;
 
 import com.example.cinema.admin.dto.AdminMovieDto;
+import com.example.cinema.admin.model.Movie;
 import com.example.cinema.cinema.model.Cinema;
 import com.example.cinema.cinema.model.City;
 import com.example.cinema.cinema.model.Hall;
@@ -82,4 +83,7 @@ public interface SeanceRepository extends JpaRepository<Seance, Long> {
     List<Seance> findByMovieAndCityAndDate(
             @Param("movieId") Long movieId, @Param("city") City city, @Param("date") Date date
     );
+
+    @Query("select s.movie.id from Seance s where s.available = true order by s.date, s.startTime")
+    List<Long> getMovies();
 }

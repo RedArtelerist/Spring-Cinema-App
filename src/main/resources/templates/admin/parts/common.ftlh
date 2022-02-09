@@ -12,6 +12,7 @@
         <link rel="stylesheet" href="/static/admin/css/select2.min.css">
         <link rel="stylesheet" href="/static/admin/css/admin.css">
         <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.10.2/css/all.css" />
     </head>
     <body>
     <header class="header">

@@ -42,7 +42,7 @@ public class CinemaService {
         return cinemaRepository.findCinemasForAdmin(search.toLowerCase(), pageable);
     }
 
-    public List<Cinema> getCinemas(String sort, String city){
+    public List<Cinema> getCinemas(String sort, String search, String city){
         Sort sorting = Sort.by(Sort.Direction.ASC, "name");
 
         if(sort.equals("rating"))
@@ -50,10 +50,10 @@ public class CinemaService {
 
         List<Cinema> cinemas;
         try {
-            cinemas = cinemaRepository.findByCity(City.valueOf(city), sorting);
+            cinemas = cinemaRepository.findByCity(City.valueOf(city), search, sorting);
         }
         catch (Exception ex){
-            cinemas = cinemaRepository.findByCity(City.Kiev, sorting);
+            cinemas = cinemaRepository.findAll(search, sorting);
         }
         return cinemas;
     }

@@ -32,12 +32,14 @@ public class Reservation {
     private String session;
 
     @NotNull(message = "Created date must not be empty")
-    @DateTimeFormat(pattern="dd.MM.yyyy hh:mm:ss")
+    @DateTimeFormat(pattern="dd.MM.yyyy HH:mm:ss")
     private Date created;
 
     @NotNull(message = "Expired date must not be empty")
-    @DateTimeFormat(pattern="dd.MM.yyyy hh:mm:ss")
+    @DateTimeFormat(pattern="dd.MM.yyyy HH:mm:ss")
     private Date expired;
+
+    private Boolean active;
 
     public Long getId() {
         return id;
@@ -93,6 +95,14 @@ public class Reservation {
 
     public void setExpired(Date expired) {
         this.expired = expired;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 
     public Integer totalPrice(){

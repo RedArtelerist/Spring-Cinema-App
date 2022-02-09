@@ -51,13 +51,18 @@ public class UserController {
     }
 
     @GetMapping("/user/{id}/scores")
-    public String userScores(@AuthenticationPrincipal User user, @PathVariable("id") Long userId, Model model,
-                            @RequestParam(required = false, defaultValue = "1") int page,
-                            @RequestParam(required = false, defaultValue = "") String sort,
-                            @RequestParam(required = false, defaultValue = "") String category,
-                            @RequestParam(required = false, defaultValue = "") String genre,
-                            @RequestParam(required = false, defaultValue = "") String from_year,
-                            @RequestParam(required = false, defaultValue = "") String to_year){
+    public String userScores(
+            @AuthenticationPrincipal User user, @PathVariable("id") Long userId, Model model,
+            @RequestParam(required = false, defaultValue = "1") int page,
+            @RequestParam(required = false, defaultValue = "") String sort,
+            @RequestParam(required = false, defaultValue = "") String category,
+            @RequestParam(required = false, defaultValue = "") String genre,
+            @RequestParam(required = false, defaultValue = "") String from_year,
+            @RequestParam(required = false, defaultValue = "") String to_year
+    ){
+        if(page < 1)
+            return "redirect:/user/" + userId + "/scores";
+
         User owner = userService.getUserById(userId);
 
         if(owner == null)
@@ -77,6 +82,10 @@ public class UserController {
 
         try {
             var votes = ratingService.getUserRatings(owner, user, page, params);
+
+            if(page > votes.getTotalPages())
+                return "redirect:/user/" + userId + "/scores";
+
             model.addAttribute("userId", owner.getId());
             model.addAttribute("username", owner.getUsername());
             model.addAttribute("url", "/user/" + userId + "/scores");
@@ -114,11 +123,18 @@ public class UserController {
                             @RequestParam(required = false, defaultValue = "1") int page){
         User owner = userService.getUserById(userId);
 
+        if(page < 1)
+            return "redirect:/user/" + userId + "/watchlist";
+
         if(owner == null)
             throw new RuntimeException("User not found");
 
         try {
             var watchlist = listsService.getUserWatchList(owner, user, page);
+
+            if(page > watchlist.getTotalPages())
+                return "redirect:/user/" + userId + "/watchlist";
+
             model.addAttribute("userId", owner.getId());
             model.addAttribute("username", owner.getUsername());
             model.addAttribute("url", "/user/" + userId + "/watchlist");
@@ -132,19 +148,28 @@ public class UserController {
     }
 
     @GetMapping("/user/{id}/favourites")
-    public String userFavourites(@AuthenticationPrincipal User user, @PathVariable("id") Long userId, Model model,
-                                @RequestParam(required = false, defaultValue = "1") int page){
+    public String userFavourites(
+            @AuthenticationPrincipal User user, @PathVariable("id") Long userId, Model model,
+            @RequestParam(required = false, defaultValue = "1") int page
+    ){
+        if(page < 1)
+            return "redirect:/user/" + userId + "/favourites";
+
         User owner = userService.getUserById(userId);
 
         if(owner == null)
             throw new RuntimeException("User not found");
 
         try {
-            var watchlist = listsService.getUserFavourites(owner, user, page);
+            var favourites = listsService.getUserFavourites(owner, user, page);
+
+            if(page > favourites.getTotalPages())
+                return "redirect:/user/" + userId + "/favourites";
+
             model.addAttribute("userId", owner.getId());
             model.addAttribute("username", owner.getUsername());
             model.addAttribute("url", "/user/" + userId + "/favourites");
-            model.addAttribute("page", watchlist);
+            model.addAttribute("page", favourites);
 
             return "main/user/favourites";
         }
@@ -154,9 +179,14 @@ public class UserController {
     }
 
     @GetMapping("/user/{id}/comments")
-    public String userComments(@AuthenticationPrincipal User user, @PathVariable("id") Long userId, Model model,
-                               @RequestParam(required = false, defaultValue = "1") int page,
-                               @RequestParam(required = false, defaultValue = "") String sort){
+    public String userComments(
+            @AuthenticationPrincipal User user, @PathVariable("id") Long userId, Model model,
+            @RequestParam(required = false, defaultValue = "1") int page,
+            @RequestParam(required = false, defaultValue = "") String sort
+    ){
+        if(page < 1)
+            return "redirect:/user/" + userId + "/comments";
+
         User owner = userService.getUserById(userId);
 
         if(owner == null)
@@ -164,6 +194,10 @@ public class UserController {
 
         try {
             var comments = commentService.userComments(owner, sort, page);
+
+            if(page > comments.getTotalPages())
+                return "redirect:/user/" + userId + "/comments";
+
             model.addAttribute("userId", owner.getId());
             model.addAttribute("username", owner.getUsername());
             model.addAttribute("url", "/user/" + userId + "/comments");

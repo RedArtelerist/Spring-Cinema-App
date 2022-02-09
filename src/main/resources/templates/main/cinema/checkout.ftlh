@@ -25,7 +25,6 @@
 
         <div class="col-sm-12">
             <div class="checkout-wrapper">
-
                 <h2 class="page-heading">Order information</h2>
                 <ul class="book-result">
                     <li class="book-result__item">Movie: <span class="book-result__count booking-ticket">${reservation.seance.movie.title}</span></li>
@@ -58,7 +57,16 @@
 
                 <h2 class="page-heading">Contact information</h2>
 
+                <#if error??>
+                    <div class="alert alert-danger" style="margin-bottom: 20px">
+                        <span class="icon-warning"></span>
+                        ${error}
+                        <a class="close" data-dismiss="alert" aria-hidden="true"></a>
+                    </div>
+                </#if>
+
                 <form id='contact-info' method='post' novalidate="" class="form contact-info">
+                    <input type="hidden" value="${_csrf.token}" name="_csrf">
                     <div class="contact-info__field contact-info__field-mail">
                         <input type='email' name='email' placeholder='Your email' class="form__mail"
                                <#if name != "unknown">value="${user.email}" </#if>>
@@ -74,11 +82,16 @@
                         <input type='text' name='lastName' placeholder='Last name' class="form__mail"
                                <#if name != "unknown">value="${user.lastName}" </#if>>
                     </div>
-                </form>
-            </div>
 
-            <div class="order">
-                <button onclick="$('#contact-info').submit();" class="btn btn-md btn--warning btn--wide">purchase</button>
+                    <input type='hidden' value='${amount?c}' name='amount' />
+                    <input type="hidden" id="stripeToken" name="stripeToken" />
+
+                    <script src="https://checkout.stripe.com/checkout.js"></script>
+                </form>
+
+            </div>
+            <div id="purchaseBtn" class="order">
+                <button class="btn btn-md btn--warning btn--wide">purchase</button>
             </div>
         </div>
 
@@ -202,5 +215,75 @@
                 cancelReservation();
             }
         }, 1000);
+    </script>
+
+    <script>
+        var handler = StripeCheckout.configure({
+            key: '${stripePublicKey}',
+            locale: 'auto',
+            token: function(token) {
+                $("#stripeToken").val(token.id);
+                $("#contact-info").submit();
+            }
+        });
+
+        document.getElementById('purchaseBtn').addEventListener('click', function(e) {
+            e.preventDefault();
+
+            var error = 0;
+            var self = $("#contact-info");
+
+            var $email = self.find('[type=email]');
+            var $firstName = self.find('[name="firstName"]');
+            var $lastName = self.find('[name="lastName"]');
+            var $phone = self.find('[type=tel]');
+
+            var emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+            var nameRegex = /^[a-zA-Z]{3,20}$/;
+            var phoneRegex = /^\+[0-9]{2}\((\d{3})\)\s\d{3}-\d{2}-\d{2}/;
+
+            if(!emailRegex.test($email.val())) {
+                createErrTult("Error! Wrong email!", $email)
+                error++;
+            }
+
+            if(!nameRegex.test($firstName.val())) {
+                createErrTult("Error! Wrong first name!", $firstName)
+                error++;
+            }
+
+            if(!nameRegex.test($lastName.val())) {
+                createErrTult("Error! Wrong last name!", $lastName)
+                error++;
+            }
+
+            if(!phoneRegex.test($phone.val())) {
+                createErrTult("Error! Wrong phone!", $phone)
+                error++;
+            }
+            if (error==0) {
+                // Open Checkout with further options:
+                handler.open({
+                    name: 'A.Movie',
+                    description: 'Booking tickets',
+                    image: '/static/main/images/tickets.png',
+                    zipCode: false,
+                    amount: ${amount?c},
+                    currency: '${currency}',
+                    email: $email.val()
+                });
+            }
+        });
+
+        function createErrTult(text, $elem){
+            $elem.focus();
+            $('<p />', {
+                'class':'inv-em alert alert-danger',
+                'html':'<span class="icon-warning"></span>' + text + ' <a class="close" data-dismiss="alert" href="#" aria-hidden="true"></a>',
+            })
+                .appendTo($elem.addClass('invalid_field').parent())
+                .insertAfter($elem)
+                .delay(4000).animate({'opacity':0},300, function(){ $(this).slideUp(400,function(){ $(this).remove() }) });
+        }
     </script>
 </@c.page>

@@ -11,14 +11,20 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ReservationRepository extends JpaRepository<Reservation, Long> {
+    @Query("select r from Reservation r where r.id = :id and r.active = true ")
+    Optional<Reservation> getActiveById(@Param("id") Long id);
+
     List<Reservation> findBySeance(Seance seance, Sort sort);
 
-    List<Reservation> findByUser(User user);
+    @Query("select r from Reservation r where r.user = :user and r.active = true")
+    List<Reservation> findByUser(@Param("user") User user);
 
-    List<Reservation> findBySession(String session);
+    @Query("select r from Reservation r where r.session = :session and r.active = true")
+    List<Reservation> findBySession(@Param("session") String session);
 
     @Query("select r from Reservation r where r.expired < :now")
     List<Reservation> findExpiredReservations(@Param("now") Date now);

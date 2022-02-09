@@ -6,9 +6,7 @@ import com.example.cinema.admin.service.MovieService;
 import com.example.cinema.cinema.model.Cinema;
 import com.example.cinema.cinema.model.Seance;
 import com.example.cinema.cinema.model.Technology;
-import com.example.cinema.cinema.service.CinemaService;
-import com.example.cinema.cinema.service.HallService;
-import com.example.cinema.cinema.service.SeanceService;
+import com.example.cinema.cinema.service.*;
 import com.example.cinema.utils.ControllerUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -34,6 +32,12 @@ public class AdminSeanceController {
 
     @Autowired
     private HallService hallService;
+
+    @Autowired
+    private RowService rowService;
+
+    @Autowired
+    private ReservationService reservationService;
 
     @GetMapping("/seances")
     public String seances(@PathVariable Long cinemaId, Model model, RedirectAttributes redirect,
@@ -139,6 +143,7 @@ public class AdminSeanceController {
         }
 
         model.addAttribute("seance", editSeance);
+        model.addAttribute("rows", rowService.findByHall(editSeance.getHall()));
         addModelAttr(cinema, model);
 
         return "admin/cinema/seance_form";
@@ -167,11 +172,19 @@ public class AdminSeanceController {
             Map<String, String> errorsMap = ControllerUtils.getErrors(bindingResult);
             model.mergeAttributes(errorsMap);
             model.addAttribute("seance", seance);
+            model.addAttribute("rows", rowService.findByHall(editSeance.getHall()));
             addModelAttr(cinema, model);
 
             return "admin/cinema/seance_form";
         }
         try {
+            var reservations = reservationService.findBySeance(editSeance);
+            if(reservations.size() > 0) {
+                redirect.addFlashAttribute("messageType", "error");
+                redirect.addFlashAttribute("message", "Can't edit. There are reservations with this seance");
+                return "redirect:/admin/cinema/" + cinemaId + "/seance/" + id;
+            }
+
             seanceService.updateSeance(editSeance, seance);
             redirect.addFlashAttribute("messageType", "success");
             redirect.addFlashAttribute("message", "Seance was successfully updated");
@@ -179,6 +192,7 @@ public class AdminSeanceController {
         catch (Exception ex){
             model.addAttribute("startTimeError", ex.getMessage());
             model.addAttribute("seance", seance);
+            model.addAttribute("rows", rowService.findByHall(editSeance.getHall()));
             addModelAttr(cinema, model);
 
             return "admin/cinema/seance_form";
@@ -204,6 +218,14 @@ public class AdminSeanceController {
             redirect.addFlashAttribute("message", "Seance not found");
             return "redirect:/admin/cinema/" + cinemaId + "/seances";
         }
+
+        var reservations = reservationService.findBySeance(seance);
+        if(reservations.size() > 0) {
+            redirect.addFlashAttribute("messageType", "error");
+            redirect.addFlashAttribute("message", "Can't delete. There are reservations with this seance");
+            return "redirect:/admin/cinema/" + cinemaId + "/seances";
+        }
+
         seanceService.deleteSeance(seance);
 
         redirect.addFlashAttribute("messageType", "success");

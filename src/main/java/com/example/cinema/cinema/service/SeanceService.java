@@ -17,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityManager;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -28,6 +29,9 @@ public class SeanceService {
 
     @Autowired
     private MovieService movieService;
+
+    @Autowired
+    private EntityManager em;
 
     public List<Seance> seanceList(Cinema cinema){
         return seanceRepository.findByCinema(cinema);
@@ -83,6 +87,30 @@ public class SeanceService {
         return seances.stream().collect(Collectors.groupingBy(c -> c.getHall().getCinema()));
     }
 
+    public List<MovieDto> findMovies(User user){
+        var ids = seanceRepository.getMovies();
+        ids = ids.stream().distinct().collect(Collectors.toList());
+        List<MovieDto> movieDtoList = new ArrayList<>();
+
+        for(var id : ids)
+            movieDtoList.add(movieService.getById(id, user));
+
+        return movieDtoList;
+    }
+
+    public List<MovieDto> findTopMovies(User user){
+        var ids = seanceRepository.getMovies();
+        ids = ids.stream().distinct().collect(Collectors.toList());
+        List<MovieDto> movieDtoList = new ArrayList<>();
+
+        for(var id : ids)
+            movieDtoList.add(movieService.getById(id, user));
+
+        return movieDtoList.stream().sorted(
+                Comparator.comparing(MovieDto::getRating, Comparator.nullsFirst(Comparator.naturalOrder())).reversed()
+        ).limit(6).collect(Collectors.toList());
+    }
+
     public Seance getById(Long id){
         Optional<Seance> optionalSeance = seanceRepository.findById(id);
         return optionalSeance.orElse(null);
@@ -114,8 +142,6 @@ public class SeanceService {
     }
 
     public void updateSeance(Seance editSeance, Seance seance) throws Exception {
-        //check if no reservations on this seanse
-
         if(seance.getStartTime().after(seance.getEndTime()))
             throw new Exception("Start time must be early then end time");
 

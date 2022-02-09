@@ -27,7 +27,7 @@
             </li>
 
             <li class="nav-item">
-                <a class="nav-link <#if title_user == "reviews">active</#if>" href="/admin/user/${uuser.id}/reviews">Reviews</a>
+                <a class="nav-link <#if title_user == "tickets">active</#if>" href="/admin/user/${uuser.id}/tickets">Tickets</a>
             </li>
         </ul>
         <!-- end profile tabs nav -->
@@ -45,7 +45,7 @@
 
                     <li class="nav-item"><a class="nav-link <#if title == "comments">active</#if>" id="2-tab" href="/admin/user/${uuser.id}/comments">Comments</a></li>
 
-                    <li class="nav-item"><a class="nav-link <#if title == "reviews">active</#if>" id="3-tab" href="/admin/user/${uuser.id}/reviews">Reviews</a></li>
+                    <li class="nav-item"><a class="nav-link <#if title == "tickets">active</#if>" id="3-tab" href="/admin/user/${uuser.id}/tickets">Tickets</a></li>
                 </ul>
             </div>
         </div>

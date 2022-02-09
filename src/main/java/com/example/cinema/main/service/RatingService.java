@@ -107,7 +107,6 @@ public class RatingService {
         return query;
     }
 
-
     private FilterItemDto prepareData(Map<String, Object> params){
         String categoryStr = (String) params.get("category");
         String genreStr = (String) params.get("genre");
@@ -126,7 +125,7 @@ public class RatingService {
         catch (Exception ex){
             genre = null;
         }
-        return new FilterItemDto(category, null, genre, null);
+        return new FilterItemDto(category, null, genre, null, "");
     }
 
 }

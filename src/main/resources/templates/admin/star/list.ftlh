@@ -62,13 +62,13 @@
                     <table class="main__table">
                         <thead>
                         <tr>
-                            <th>ID</th>
-                            <th>BASIC INFO</th>
+                            <th>Id</th>
+                            <th>Basic info</th>
                             <th>Gender</th>
-                            <th>BIRTH PLACE</th>
-                            <th>BIRTHDAY</th>
-                            <th>STATUS</th>
-                            <th>ACTIONS</th>
+                            <th>Bitrh Place</th>
+                            <th>Birthday</th>
+                            <th>Status</th>
+                            <th>Actions</th>
                         </tr>
                         </thead>
 

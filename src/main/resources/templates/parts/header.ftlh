@@ -25,9 +25,15 @@
                     <a href="#">Pages</a>
                     <ul>
                         <li class="menu__nav-item"><a href="/navigator">Navigator</a></li>
-                        <li class="menu__nav-item"><a href="/movies/top250/">Top 250 movies</a></li>
-                        <li class="menu__nav-item"><a href="/tv-shows/top250/">Top 250 TV Shows</a></li>
+                        <li class="menu__nav-item"><a href="/navigator?sort=rating&category=Movie">Top Movies</a></li>
+                        <li class="menu__nav-item"><a href="/navigator?sort=rating&category=TVShow">Top TV Shows</a></li>
+                        <li class="menu__nav-item"><a href="/navigator?sort=popularity&category=Movie">Most popular Movies</a></li>
+                        <li class="menu__nav-item"><a href="/navigator?sort=popularity&category=TVShow">Most popular TV Shows</a></li>
+                        <li class="menu__nav-item"><a href="/stars?sort=popularity">Stars</a></li>
                     </ul>
+                </li>
+                <li>
+                    <a href="/cinemas">Cinemas</a>
                 </li>
                 <li>
                     <span class="sub-nav-toggle plus"></span>
@@ -93,9 +99,9 @@
             <#if name !="unknown">
                 <div class="auth auth--home">
                     <div class="auth__show">
-                            <span class="auth__image">
-                              <img alt="" src="${user.imgUrl}">
-                            </span>
+                        <span class="auth__image">
+                          <img alt="" src="${user.imgUrl}">
+                        </span>
                     </div>
                     <a href="#" class="btn btn--sign btn--singin">
                         ${name}
@@ -103,13 +109,13 @@
                     <ul class="auth__function">
                         <li><a href="/user/${currentUserId}" class="auth__function-item">Profile</a></li>
                         <li><a href="/user/${currentUserId}/watchlist" class="auth__function-item">Watchlist</a></li>
-                        <li><a href="#" class="auth__function-item">Booked tickets</a></li>
+                        <li><a href="/tickets" class="auth__function-item">Booked tickets</a></li>
                         <li><a href="/profile" class="auth__function-item">Settings</a></li>
                         <#if isAdmin || isOwner><li><a href="/admin" class="auth__function-item">Admin</a></li></#if>
                         <li>
                             <form action="/logout" method="post">
                                 <input type="hidden" name="_csrf" value="${_csrf.token}" />
-                                <button class="auth__function-item" type="submit">Logout</button>
+                                <a href="#" class="auth__function-item" onclick="$(this).parent().submit()">Logout</a>
                             </form>
                         </li>
                     </ul>

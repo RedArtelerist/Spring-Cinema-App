@@ -58,15 +58,15 @@
                     <table class="main__table">
                         <thead>
                         <tr>
-                            <th>ID</th>
-                            <th>BASIC INFO</th>
-                            <th>USERNAME</th>
-                            <th>COMMENTS</th>
-                            <th>STATUS</th>
+                            <th>Id</th>
+                            <th>Basic info</th>
+                            <th>Username</th>
+                            <th>Comments</th>
+                            <th>Status</th>
                             <th>Active</th>
-                            <th>CREATED DATE</th>
-                            <th>UPDATED DATE</th>
-                            <th>ACTIONS</th>
+                            <th>Created date</th>
+                            <th>Updated date</th>
+                            <th>Actions</th>
                         </tr>
                         </thead>
 

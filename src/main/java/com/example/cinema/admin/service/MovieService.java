@@ -264,16 +264,25 @@ public class MovieService {
                     movie -> movie.getCompanies().contains(company)
             ).collect(Collectors.toList());
         }
+
         if(filter.getGenre() != null){
             Genre genre = filter.getGenre();
             query = query.stream().filter(
                     movie -> movie.getGenres().contains(genre)
             ).collect(Collectors.toList());
         }
+
         if(filter.getCountry() != null){
             Country country = filter.getCountry();
             query = query.stream().filter(
                     movie -> movie.getCountries().contains(country)
+            ).collect(Collectors.toList());
+        }
+
+        if(filter.getSearch() != null && !Objects.equals(filter.getSearch(), "")){
+            String search = filter.getSearch();
+            query = query.stream().filter(
+                    movie -> movie.getTitle().toLowerCase().contains(search)
             ).collect(Collectors.toList());
         }
         return query;
@@ -284,6 +293,7 @@ public class MovieService {
         Long companyId = (Long) params.get("company");
         String genreStr = (String) params.get("genre");
         String countryStr = (String) params.get("country");
+        String search = (String) params.get("search");
 
         Category category;
         try {
@@ -310,6 +320,6 @@ public class MovieService {
         catch (Exception ex){
             country = null;
         }
-        return new FilterItemDto(category, company, genre, country);
+        return new FilterItemDto(category, company, genre, country, search);
     }
 }

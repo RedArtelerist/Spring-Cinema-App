@@ -3,7 +3,9 @@ package com.example.cinema.cinema.service;
 import com.example.cinema.account.model.User;
 import com.example.cinema.cinema.model.*;
 import com.example.cinema.cinema.repository.ReservationRepository;
+import com.example.cinema.cinema.repository.SeanceRepository;
 import com.example.cinema.cinema.repository.SeatReservedRepository;
+import com.example.cinema.cinema.repository.TicketRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -20,12 +22,23 @@ public class ReservationService {
     @Autowired
     private SeatReservedRepository seatReservedRepository;
 
+    @Autowired
+    private SeanceRepository seanceRepository;
+
+    @Autowired
+    private TicketRepository ticketRepository;
+
     public List<Reservation> findBySeance(Seance seance){
         return reservationRepository.findBySeance(seance, Sort.by(Sort.Direction.ASC, "created"));
     }
 
-    public Reservation findById(Long reservationId){
+    public Reservation getById(Long reservationId){
         Optional<Reservation> reservationOptional = reservationRepository.findById(reservationId);
+        return reservationOptional.orElse(null);
+    }
+
+    public Reservation findById(Long reservationId){
+        Optional<Reservation> reservationOptional = reservationRepository.getActiveById(reservationId);
         return reservationOptional.orElse(null);
     }
 
@@ -55,6 +68,7 @@ public class ReservationService {
 
         reservation.setCreated(created);
         reservation.setExpired(expired);
+        reservation.setActive(true);
 
         if(user != null)
             reservation.setUser(user);
@@ -82,6 +96,11 @@ public class ReservationService {
     }
 
     public void removeReservation(Reservation reservation) {
+        var tickets = ticketRepository.findByReservationId(reservation.getId());
+        for(var ticket : tickets){
+            ticket.setReservationId(null);
+            ticketRepository.save(ticket);
+        }
         reservationRepository.delete(reservation);
     }
 

@@ -263,6 +263,7 @@ function init_Home() {
 
         //get the data attribute of the clicked link(which is equal to value filter of our content)
         var filter = $(this).attr('data-filter');
+        $("#type_search").val(filter);
 
         //Filter buttons
         //show all the list items(this is needed to get the hidden ones shown)

@@ -14,6 +14,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.persistence.EntityManager;
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -28,6 +29,9 @@ public class StarService {
 
     @Autowired
     private MovieRepository movieRepository;
+
+    @Autowired
+    private EntityManager em;
 
     public List<Star> starList(){
         return starRepository.findAll(Sort.by(Sort.Direction.ASC, "firstName", "lastName"));
@@ -52,6 +56,33 @@ public class StarService {
 
         if(search != null && !search.equals(""))
             return starRepository.search(search.toLowerCase(), pageable);
+
+        return starRepository.findAll(pageable);
+    }
+
+    public Page<Star> starList(String sort, String search, int pageNum){
+        var sorting = Sort.by(Sort.Direction.ASC, "firstName", "lastName");
+
+        if(sort.equals("name-asc"))
+            sorting = Sort.by(Sort.Direction.ASC, "firstName", "lastName");
+
+        if(sort.equals("name-desc"))
+            sorting = Sort.by(Sort.Direction.DESC, "firstName", "lastName");
+        if(sort.equals("birthday"))
+            sorting = Sort.by(Sort.Direction.ASC, "birthday");
+
+        if(sort.equals("popularity")) {
+            Pageable pageable = PageRequest.of(pageNum - 1, 20);
+            if(search != null && !search.equals(""))
+                return starRepository.sortByPopularity(search, pageable);
+            else
+                return starRepository.sortByPopularity(pageable);
+        }
+
+        Pageable pageable = PageRequest.of(pageNum - 1,20, sorting);
+
+        if(search != null && !search.equals(""))
+            return starRepository.findBySearch(search.toLowerCase(), pageable);
 
         return starRepository.findAll(pageable);
     }

@@ -41,9 +41,9 @@
                     <table class="main__table">
                         <thead>
                         <tr>
-                            <th>ID</th>
+                            <th>Id</th>
                             <th>Name</th>
-                            <th>ACTIONS</th>
+                            <th>Actions</th>
                         </tr>
                         </thead>
 

@@ -1,6 +1,7 @@
 package com.example.cinema.account.model;
 
 import com.example.cinema.account.constraints.ValidPassword;
+import com.example.cinema.cinema.model.Ticket;
 import com.example.cinema.main.model.Comment;
 import com.example.cinema.main.model.Favourite;
 import com.example.cinema.main.model.Rating;
@@ -105,6 +106,10 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<Comment> comments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<Ticket> tickets = new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JsonBackReference
@@ -292,6 +297,14 @@ public class User implements UserDetails {
 
     public void setSubscriptions(Set<User> subscriptions) {
         this.subscriptions = subscriptions;
+    }
+
+    public List<Ticket> getTickets() {
+        return tickets;
+    }
+
+    public void setTickets(List<Ticket> tickets) {
+        this.tickets = tickets;
     }
 
     @Override

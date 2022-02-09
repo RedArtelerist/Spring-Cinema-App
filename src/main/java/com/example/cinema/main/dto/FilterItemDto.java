@@ -14,11 +14,13 @@ public class FilterItemDto {
     Company company;
     Genre genre;
     Country country;
+    String search;
 
-    public FilterItemDto(Category category, Company company, Genre genre, Country country) {
+    public FilterItemDto(Category category, Company company, Genre genre, Country country, String search) {
         this.category = category;
         this.company = company;
         this.genre = genre;
         this.country = country;
+        this.search = search.toLowerCase().trim();
     }
 }

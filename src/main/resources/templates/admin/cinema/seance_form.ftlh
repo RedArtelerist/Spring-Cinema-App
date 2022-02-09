@@ -7,7 +7,7 @@
             <div class="col-12">
                 <div class="main__title">
                     <#if seance?? && seance.id??>
-                        <h2>Edit new seance</h2>
+                        <h2>Edit seance</h2>
                     <#else>
                         <h2>Add new seance</h2>
                     </#if>
@@ -144,5 +144,63 @@
             </div>
             <!-- end form -->
         </div>
+        <#if seance?? && seance.id??>
+            <div class="row">
+                <div class="main__table-wrap">
+                    <table class="main__table">
+                        <tbody>
+                        <tr>
+                            <td>
+                                <div class="choose-sits">
+
+                                    <div class="choose-sits__info choose-sits__info--first" style="margin-bottom: 20px">
+                                        <ul>
+                                            <li class="sits-price marker--none"><strong>Price</strong></li>
+                                            <li class="sits-price sits-price--cheap">₴${seance.price}</li>
+                                            <li class="sits-price sits-price--middle">₴${seance.price * 1.5}</li>
+                                            <li class="sits-price sits-price--expensive">₴${seance.price * 2}</li>
+                                        </ul>
+                                    </div>
+
+                                    <div class="choose-sits__info" style="margin-bottom: 100px">
+                                        <ul>
+                                            <li class="sits-state sits-state--not">Not available</li>
+                                            <li class="sits-state sits-state--your">Your choice</li>
+                                        </ul>
+                                    </div>
+
+                                    <div class="col-sm-12 col-lg-10 col-lg-offset-1">
+                                        <div class="sits-area hidden-xs">
+                                            <div class="sits-anchor">screen</div>
+
+                                            <div class="sits">
+                                                <aside class="sits__line">
+                                                    <#list rows as row>
+                                                        <span class="sits__indecator">${row.name}</span>
+                                                    </#list>
+                                                </aside>
+
+                                                <#list rows as row>
+                                                    <div class="sits__row">
+                                                        <#list row.seats as seat>
+                                                            <span class="sits__place <#if seance.seatReserved(seat)>sits-state--not<#else><#if seat.type == 'Standard'>sits-price--cheap<#elseif seat.type == 'Vip'>sits-price--middle<#else>sits-price--expensive</#if></#if>"
+                                                                  data-id="${seat.id?c}" data-place='${row.name}${seat.number}' data-price="<#if seat.type == 'Standard'>${seance.price}<#elseif seat.type == 'Vip'>${seance.price * 1.5}<#else>${seance.price * 2}</#if>">
+                                                                ${row.name}${seat.number}
+                                                            </span>
+                                                        </#list>
+                                                    </div>
+                                                </#list>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </#if>
     </div>
 </@c.page>

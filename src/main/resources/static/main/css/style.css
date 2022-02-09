@@ -8227,6 +8227,9 @@ ul#navigation li.mega-menu__nav-item:hover:before {
 .mega-select-marker .location:before {
   background-image: url(../images/icons/location.svg);
 }
+.mega-select-marker .movie-title:before {
+  background-image: url(../images/icons/fiml.svg);
+}
 .mega-select-marker .cinema:before {
   background-image: url(../images/icons/camera.svg);
   width: 200px;
@@ -9197,7 +9200,7 @@ ul#navigation li.mega-menu__nav-item:hover:before {
   margin-bottom: 8px;
 }
 .movie--test .movie__images {
-  width: 50%;
+  /*width: 50%;*/
   border: none;
   position: relative;
 }
@@ -9242,7 +9245,23 @@ ul#navigation li.mega-menu__nav-item:hover:before {
   padding: 17px 17px;
   position: relative;
   min-height: 200px;
+  height: 370px;
   margin: 0;
+}
+.movie--test .preview-footer{
+  position: absolute;
+  left: 0;
+  bottom: 0;
+}
+.movie--test .movie__rate{
+  position: relative;
+}
+.movie--test .star-rating{
+  width: 205px;
+}
+.movie--test .star-rating label{
+  padding: 3px;
+  font-size: 12px;
 }
 .movie--test .movie__title {
   font-size: 16px;

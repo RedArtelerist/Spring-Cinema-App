@@ -53,13 +53,13 @@
                     <table class="main__table">
                         <thead>
                         <tr>
-                            <th>ID</th>
-                            <th>ITEM</th>
-                            <th>AUTHOR</th>
-                            <th>TEXT</th>
-                            <th>LIKE / DISLIKE</th>
-                            <th>CREATED DATE</th>
-                            <th>ACTIONS</th>
+                            <th>Id</th>
+                            <th>Item</th>
+                            <th>Author</th>
+                            <th>Text</th>
+                            <th>Like / Dislike</th>
+                            <th>Created date</th>
+                            <th>Action</th>
                         </tr>
                         </thead>
 

@@ -40,16 +40,19 @@
                 <#if name != "unknown">
                     <div class="col-lg-2">
                         <#if currentUserId == owner.id>
-                            <a href="/profile" class="btn btn-md btn--default">
+                            <a href="/profile" class="btn btn-md btn--default" style="float: right;">
                                 <i class="fas fa-user-edit"></i>
+                            </a>
+                            <a href="/tickets" class="btn btn-md btn--default" style="float: right;margin-right: 30px">
+                                <i class="fas fa-ticket-alt"></i>
                             </a>
                         <#else>
                             <#if isSubscriber>
-                                <a href="/unsubscribe/${owner.id}" class="btn btn-md btn--default">
+                                <a href="/unsubscribe/${owner.id}" class="btn btn-md btn--default" style="float: right">
                                     Unsubscribe
                                 </a>
                             <#else>
-                                <a href="/subscribe/${owner.id}" class="btn btn-md btn--default">
+                                <a href="/subscribe/${owner.id}" class="btn btn-md btn--default" style="float: right">
                                     Subscribe
                                 </a>
                             </#if>

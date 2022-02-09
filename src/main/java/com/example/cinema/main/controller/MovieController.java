@@ -123,6 +123,7 @@ public class MovieController {
     @GetMapping("/navigator")
     public String list(@AuthenticationPrincipal User user, Model model,
                        @RequestParam(required = false, defaultValue = "1") int page,
+                       @RequestParam(required = false, defaultValue = "") String search,
                        @RequestParam(required = false, defaultValue = "") String sort,
                        @RequestParam(required = false, defaultValue = "") String category,
                        @RequestParam(required = false, defaultValue = "0") String company,
@@ -144,11 +145,15 @@ public class MovieController {
 
         var params = processFilterParams(
                 sort, category, company, genre,
-                country, from_year, to_year, years
+                country, from_year, to_year, years, search
         );
 
         try {
             var items = movieService.findItems(user, page, params);
+
+            if(page > items.getTotalPages())
+                return "redirect:/navigator";
+
             model.addAttribute("page", items);
             model.addAttribute("url", "/navigator");
             model.addAttribute("sort", sort);
@@ -156,6 +161,7 @@ public class MovieController {
             model.addAttribute("company", (long) params.get("company"));
             model.addAttribute("genre", genre);
             model.addAttribute("country", country);
+            model.addAttribute("search", search);
             model.addAttribute("from_year", (Integer) params.get("from_year"));
             model.addAttribute("to_year", (Integer) params.get("to_year"));
 
@@ -197,9 +203,10 @@ public class MovieController {
         return "redirect:/item/" + item.getId();
     }
 
-    private Map<String, Object> processFilterParams(String sort, String category, String company,
-                                                    String genre, String country, String from_year,
-                                                    String to_year, List<Integer> years){
+    private Map<String, Object> processFilterParams(
+            String sort, String category, String company, String genre, String country,
+            String from_year, String to_year, List<Integer> years, String search
+    ){
         Integer from, to;
         try {
             from = Integer.parseInt(from_year);
@@ -236,6 +243,7 @@ public class MovieController {
         params.put("country", country);
         params.put("from_year", from);
         params.put("to_year", to);
+        params.put("search", search);
 
         return params;
     }

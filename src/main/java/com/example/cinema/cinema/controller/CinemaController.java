@@ -28,10 +28,13 @@ public class CinemaController {
     private SeanceService seanceService;
 
     @GetMapping("/cinemas")
-    public String cinemaList(@RequestParam(required = false, defaultValue = "") String sort,
-                             @RequestParam(required = false, defaultValue = "Kiev") String city, Model model){
+    public String cinemaList(
+            @RequestParam(required = false, defaultValue = "") String sort, Model model,
+            @RequestParam(required = false, defaultValue = "all") String city,
+            @RequestParam(required = false, defaultValue = "") String search
+    ){
         model.addAttribute("cities", City.values());
-        model.addAttribute("cinemas", cinemaService.getCinemas(sort, city));
+        model.addAttribute("cinemas", cinemaService.getCinemas(sort, search.toLowerCase(), city));
         model.addAttribute("sort", sort);
         model.addAttribute("city", city);
 

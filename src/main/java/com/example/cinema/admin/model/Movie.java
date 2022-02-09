@@ -1,6 +1,7 @@
 package com.example.cinema.admin.model;
 
 import com.example.cinema.cinema.model.Seance;
+import com.example.cinema.cinema.model.Ticket;
 import com.example.cinema.main.model.Comment;
 import com.example.cinema.main.model.Favourite;
 import com.example.cinema.main.model.Rating;
@@ -115,6 +116,10 @@ public class Movie {
     @OneToMany(mappedBy = "movie", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Seance> seances = new ArrayList<>();
+
+    @OneToMany(mappedBy = "movie", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<Ticket> tickets = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -314,6 +319,14 @@ public class Movie {
 
     public void setSeances(List<Seance> seances) {
         this.seances = seances;
+    }
+
+    public List<Ticket> getTickets() {
+        return tickets;
+    }
+
+    public void setTickets(List<Ticket> tickets) {
+        this.tickets = tickets;
     }
 }
 
