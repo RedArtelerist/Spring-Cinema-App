@@ -192,16 +192,9 @@
                         <div class="category category--cooming category--count marginb-sm mobile-category rs-cat">
                             <h3 class="category__title">coming soon<br><span class="title-edition">movies</span></h3>
                             <ol>
-                                <li><a href="#" class="category__item">Ender's Game</a></li>
-                                <li><a href="#" class="category__item">About Time</a></li>
-                                <li><a href="#" class="category__item">Last Vegas</a></li>
-                                <li><a href="#" class="category__item">Free Birds</a></li>
-                                <li><a href="#" class="category__item">The Wolf of Wall Street</a></li>
-                                <li><a href="#" class="category__item">The Best Man Holiday</a></li>
-                                <li><a href="#" class="category__item">The Book Thief</a></li>
-                                <li><a href="#" class="category__item">The Hunger Games: Catching Fire</a></li>
-                                <li><a href="#" class="category__item">Delivery Man</a></li>
-                                <li><a href="#" class="category__item">Nebraska</a></li>
+                                <#list movies_coming as movie>
+                                    <li><a href="/item/${movie.id}" class="category__item">${movie.title}</a></li>
+                                </#list>
                             </ol>
                         </div>
 

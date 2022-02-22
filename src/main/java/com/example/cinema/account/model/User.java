@@ -42,12 +42,12 @@ public class User implements UserDetails {
     private String username;
 
     @Column(name = "first_name", nullable = false, length = 30)
-    @Pattern(regexp = "^[A-Z][a-z]*", message = "First name must contain only letters with first capital letter")
+    @Pattern(regexp = "^[A-ZА-Я][a-zа-я]*", message = "First name must contain only letters with first capital letter")
     @Length(min = 3, max = 30, message = "First name must be between 3 and 30 characters")
     private String firstName;
 
     @Column(name = "last_name", nullable = false, length = 30)
-    @Pattern(regexp = "^[A-Z][a-z]*", message = "Last name must contain only letters with first capital letter")
+    @Pattern(regexp = "^[A-ZА-Я][a-zа-я]*", message = "Last name must contain only letters with first capital letter")
     @Length(min = 3, max = 30, message = "Last name must be between 3 and 30 characters")
     private String lastName;
 

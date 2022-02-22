@@ -151,7 +151,7 @@
                             </#list>
                         </select>
                     </form>
-                    <a href="#" id="map-switch" class="watchlist watchlist--map watchlist--map-full"><span class="show-map">Show cinemas on map</span><span  class="show-time">Show cinema time table</span></a>
+                    <a href="#" id="map-switch" class="watchlist watchlist--map watchlist--map-full"><span class="show-map">Show cinemas on map</span><span class="hide-cinemas_map">Hide map</span></a>
 
                     <div class="clearfix"></div>
 
@@ -171,8 +171,10 @@
                     </div>
                 </#if>
 
-
-                <div class="clearfix"></div>
+                <!-- hiden maps with multiple locator-->
+                <div class="map hide-map">
+                    <div id='cimenas-map'></div>
+                </div>
 
                 <h2 class="page-heading">comments (${item.numComments})</h2>
 
@@ -417,16 +419,9 @@
                 <div class="category category--cooming category--count marginb-sm mobile-category rs-cat">
                     <h3 class="category__title">coming soon<br><span class="title-edition">movies</span></h3>
                     <ol>
-                        <li><a href="#" class="category__item">Ender's Game</a></li>
-                        <li><a href="#" class="category__item">About Time</a></li>
-                        <li><a href="#" class="category__item">Last Vegas</a></li>
-                        <li><a href="#" class="category__item">Free Birds</a></li>
-                        <li><a href="#" class="category__item">The Wolf of Wall Street</a></li>
-                        <li><a href="#" class="category__item">The Best Man Holiday</a></li>
-                        <li><a href="#" class="category__item">The Book Thief</a></li>
-                        <li><a href="#" class="category__item">The Hunger Games: Catching Fire</a></li>
-                        <li><a href="#" class="category__item">Delivery Man</a></li>
-                        <li><a href="#" class="category__item">Nebraska</a></li>
+                        <#list movies_coming as movie>
+                            <li><a href="/item/${movie.id}" class="category__item">${movie.title}</a></li>
+                        </#list>
                     </ol>
                 </div>
 
@@ -536,6 +531,10 @@
     <script src="/static/main/js/external/idangerous.swiper.min.js"></script>
     <!-- Magnific-popup -->
     <script src="/static/main/js/external/jquery.magnific-popup.min.js"></script>
+    <!--*** Google map  ***-->
+    <script src="https://maps.google.com/maps/api/js?key=AIzaSyDmTU3PdXiLiXqNDbHDOeEfCU4iq7UShDE&language=en"></script>
+    <!--*** Google map infobox  ***-->
+    <script src="/static/main/js/external/infobox.js"></script>
 
     <!-- Form element -->
     <script src="/static/main/js/external/form-element.js"></script>
@@ -856,6 +855,69 @@
             }
         </#if>
 
+    </script>
+
+    <script>
+        <#assign center = cinema_seances?keys[0]>
+
+        //Map start init
+        var mapOptions = {
+            scaleControl: true,
+            center: new google.maps.LatLng(${center.latitude?c}, ${center.longitude?c}),
+            zoom: 12,
+            navigationControl: false,
+            streetViewControl: false,
+            mapTypeControl: false,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+
+        var map = new google.maps.Map(document.getElementById('cimenas-map'),mapOptions);
+
+        <#list cinema_seances?keys as cinema>
+            var marker${cinema?index} = new google.maps.Marker({
+                map: map,
+                position: new google.maps.LatLng(${cinema.latitude?c}, ${cinema.longitude?c})
+            });
+
+            var boxText${cinema?index} = document.createElement("div");
+            boxText${cinema?index}.innerHTML = '<span class="pop_up_box_text">${cinema.name}</span>';
+
+            //Sets up the configuration options of the pop-up info box.
+            var infoboxOptions${cinema?index} = {
+                content: boxText${cinema?index}
+                ,disableAutoPan: false
+                ,maxWidth: 0
+                ,pixelOffset: new google.maps.Size(30, -50)
+                ,zIndex: null
+                ,boxStyle: {
+                    background: "#4c4145"
+                    ,opacity: 1
+                    ,width: "300px"
+                    ,color: " #b4b1b2"
+                    ,fontSize:"13px"
+                    ,padding:'14px 20px 15px'
+                }
+                ,closeBoxMargin: "6px 2px 2px 2px"
+                ,infoBoxClearance: new google.maps.Size(1, 1)
+                ,closeBoxURL: "/static/main/images/components/close.svg"
+                ,isHidden: false
+                ,pane: "floatPane"
+                ,enableEventPropagation: false
+            };
+
+
+            //Creates the pop-up infobox for Glastonbury, adding the configuration options set above.
+            var infobox${cinema?index} = new InfoBox(infoboxOptions${cinema?index});
+
+
+            //Add an 'event listener' to the Glastonbury map marker to listen out for when it is clicked.
+            google.maps.event.addListener(marker${cinema?index}, "click", function (e) {
+                //Open the Glastonbury info box.
+                infobox${cinema?index}.open(map, this);
+                //Sets the Glastonbury marker to be the center of the map.
+                map.setCenter(marker${cinema?index}.getPosition());
+            });
+        </#list>
     </script>
 
 </@c.page>

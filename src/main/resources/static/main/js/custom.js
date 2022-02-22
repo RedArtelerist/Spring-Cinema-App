@@ -1066,20 +1066,6 @@ function init_MoviePage () {
 
     });
 
-    //5. Datepicker init
-    $( ".datepicker__input" ).datepicker({
-      showOtherMonths: true,
-      selectOtherMonths: true,
-      showAnim:"fade"
-    });
-
-    $(document).click(function(e) {
-        var ele = $(e.target);
-        if (!ele.hasClass("datepicker__input") && !ele.hasClass("ui-datepicker") && !ele.hasClass("ui-icon") && !$(ele).parent().parents(".ui-datepicker").length){
-           $(".datepicker__input").datepicker("hide");
-         }
-    });
-
     //6. Reply comment form
     // button more comments
     $('#hide-comments').hide();
@@ -1098,7 +1084,6 @@ function init_MoviePage () {
         $(this).addClass('active');
     });
 
-
     //10. Scroll down navigation function
     //scroll down
     $('.comment-link').click(function (ev) {
@@ -1109,17 +1094,14 @@ function init_MoviePage () {
     $('#map-switch').click(function(ev){
         ev.preventDefault();
 
-        $('.time-select').slideToggle(500);
+        //$('.time-select').slideToggle(500);
         $('.map').slideToggle(500);
 
         $('.show-map').toggle();
-        $('.show-time').toggle();
+        $('.hide-cinemas_map').toggle();
         $(this).blur();
     });
 
-    /*$(window).load(function() {
-        $('.map').addClass('hide-map');
-    });*/
 }
 
 function init_MoviePageFull () {

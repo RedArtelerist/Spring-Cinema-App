@@ -24,8 +24,8 @@ public class Cinema {
     @Enumerated(EnumType.STRING)
     private City city;
 
-    @Column(nullable = false, length = 60)
-    @Length(min = 5, max = 60, message = "Address must be between 5 and 60 characters")
+    @Column(nullable = false, length = 100)
+    @Length(min = 5, max = 100, message = "Address must be between 5 and 60 characters")
     private String address;
 
     @Pattern(regexp = "^\\+[0-9]{2}\\((\\d{3})\\)\\s\\d{3}-\\d{2}-\\d{2}", message = "Incorrect phone number")

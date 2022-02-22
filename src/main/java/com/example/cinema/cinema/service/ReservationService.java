@@ -51,6 +51,10 @@ public class ReservationService {
         return reservationRepository.findByUser(user);
     }
 
+    public List<Reservation> findAllByUser(User user){
+        return reservationRepository.findAllByUser(user);
+    }
+
     public List<Reservation> findBySession(String session){
         return reservationRepository.findBySession(session);
     }

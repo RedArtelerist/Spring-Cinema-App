@@ -8,9 +8,8 @@
         <p class="login__title">sign in <br><span class="login-edition">welcome to A.Movie</span></p>
 
         <div class="social social--colored">
-            <a href='#' class="social__variant fa fa-facebook"></a>
-            <a href='#' class="social__variant fa fa-twitter"></a>
-            <a href='#' class="social__variant fa fa-tumblr"></a>
+            <a href='/oauth2/authorization/google' class="social__variant fab fa-google"></a>
+            <a href='/oauth2/authorization/facebook' class="social__variant fab fa-facebook-f"></a>
         </div>
 
         <p class="login__tracker">or</p>

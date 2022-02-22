@@ -28,10 +28,8 @@ public class MovieService {
     @Autowired
     private FirebaseImageService firebaseImageService;
 
-    @Autowired CompanyService companyService;
-
     @Autowired
-    private EntityManager em;
+    private CompanyService companyService;
 
     public List<Movie> movieList(){
         return movieRepository.findAll(Sort.by(Sort.Direction.ASC, "title"));

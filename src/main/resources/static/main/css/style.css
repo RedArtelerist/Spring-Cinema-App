@@ -6153,6 +6153,9 @@ ul#navigation li.mega-menu__nav-item:hover:before {
 .show-time {
   display: none;
 }
+.hide-cinemas_map{
+  display: none;
+}
 .pop_up_box_text {
   display: block;
 }
@@ -8573,10 +8576,10 @@ ul#navigation li.mega-menu__nav-item:hover:before {
   margin-right: 13px;
   margin-left: 13px;
 }
-.social--colored .social__variant.fa-facebook {
+.social--colored .social__variant.fa-facebook-f {
   background-color: #3b5998;
 }
-.social--colored .social__variant.fa-facebook:after {
+.social--colored .social__variant.fa-facebook-f:after {
   border-color: #3b5998;
 }
 .social--colored .social__variant.fa-twitter {
@@ -8585,16 +8588,16 @@ ul#navigation li.mega-menu__nav-item:hover:before {
 .social--colored .social__variant.fa-twitter:after {
   border-color: #00acee;
 }
-.social--colored .social__variant.fa-tumblr {
-  background-color: #34526f;
+.social--colored .social__variant.fa-google {
+  background-color: #c33333;
 }
-.social--colored .social__variant.fa-tumblr:after {
-  border-color: #34526f;
+.social--colored .social__variant.fa-google:after {
+  border-color: #c33333;
 }
-.social--colored .social__variant.fa:hover {
+.social--colored .social__variant.fab:hover {
   background-color: #4c4145;
 }
-.social--colored .social__variant.fa:hover:after {
+.social--colored .social__variant.fab:hover:after {
   border-color: #4c4145;
 }
 .price--gold .price-inner {

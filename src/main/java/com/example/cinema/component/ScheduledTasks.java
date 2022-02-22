@@ -55,6 +55,15 @@ public class ScheduledTasks {
     }
 
     @Scheduled(fixedRate = 10000)
+    public void deleteEndedSeances() {
+        Date now = new Date();
+        List<Seance> seances = seanceRepository.findEndedSeances(now, now);
+
+        for(Seance seance : seances)
+            seanceRepository.delete(seance);
+    }
+
+    @Scheduled(fixedRate = 10000)
     public void clearAllReservations() {
         log.info("The time is now {}", dateFormat.format(new Date()));
 

@@ -1369,6 +1369,11 @@ body::-webkit-scrollbar-thumb {
   overflow: hidden;
   border-radius: 16px;
 }
+#cinema-map {
+  height: 530px;
+  width: 100%;
+  margin-bottom: 20px;
+}
 .form__gallery input {
   position: absolute;
   left: -9999px;

@@ -1,5 +1,6 @@
 package com.example.cinema.config;
 
+import com.example.cinema.component.LoadContentInterceptor;
 import com.example.cinema.component.VerifyAccessInterceptor;
 import com.example.cinema.utils.RedirectInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class MvcConfig implements WebMvcConfigurer {
     @Autowired
     private VerifyAccessInterceptor verifyAccessInterceptor;
+
+    @Autowired
+    private LoadContentInterceptor loadContentInterceptor;
 
     @Bean
     public RestTemplate getRestTemplate() {
@@ -37,5 +41,6 @@ public class MvcConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new RedirectInterceptor());
         registry.addInterceptor(verifyAccessInterceptor).addPathPatterns("/**");
+        registry.addInterceptor(loadContentInterceptor).addPathPatterns("/**");
     }
 }

@@ -54,6 +54,9 @@ public interface SeanceRepository extends JpaRepository<Seance, Long> {
     @Query("select s from Seance s where s.date < :date or (s.date = :date and s.startTime <= :time) and s.available = true")
     List<Seance> findExpiredSeances(@Param("date") Date date, @Param("time") Date time);
 
+    @Query("select s from Seance s where s.date < :date or (s.date = :date and s.endTime <= :time)")
+    List<Seance> findEndedSeances(@Param("date") Date date,  @Param("time") Date time);
+
     @Query("select distinct s.date from Seance s where s.hall.cinema = :cinema order by s.date")
     List<Date> getDatesByCinema(@Param("cinema") Cinema cinema);
 

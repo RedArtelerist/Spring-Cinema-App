@@ -1,6 +1,9 @@
 package com.example.cinema.config;
 
+import com.example.cinema.account.service.CustomOAuth2UserService;
 import com.example.cinema.account.service.UserService;
+import com.example.cinema.component.OAuthAuthenticationFailureHandler;
+import com.example.cinema.component.OAuthLoginSuccessHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,8 +18,6 @@ import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
-import org.springframework.web.multipart.MultipartResolver;
-import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 @Configuration
 @EnableWebSecurity
@@ -24,6 +25,15 @@ import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private CustomOAuth2UserService oauth2UserService;
+
+    @Autowired
+    private OAuthLoginSuccessHandler oAuthLoginSuccessHandler;
+
+    @Autowired
+    private OAuthAuthenticationFailureHandler oAuthAuthenticationFailureHandler;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -51,7 +61,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                     .antMatchers("/registration").not().fullyAuthenticated()
                     .antMatchers("/", "/static/**", "/confirm/*", "/navigator/**", "/item/**", "/star/**").permitAll()
-                    .antMatchers("/user/**", "/cinemas", "/cinema/**", "/seance/**", "/reservation/**").permitAll()
+                    .antMatchers("/user/**", "/cinemas", "/cinema/**", "/seance/**", "/reservation/**", "/oauth2/**").permitAll()
                     .antMatchers("/forgot-password", "/reset-password/**").not().fullyAuthenticated()
                     .antMatchers("/admin/**").hasAnyAuthority("ADMIN", "OWNER")
                     .anyRequest().authenticated()
@@ -61,6 +71,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .defaultSuccessUrl("/")
                 .failureUrl("/login?error=true")
                 .permitAll()
+            .and()
+                .oauth2Login()
+                .loginPage("/login")
+                .userInfoEndpoint()
+                .userService(oauth2UserService)
+            .and()
+                .successHandler(oAuthLoginSuccessHandler)
+                .failureHandler(oAuthAuthenticationFailureHandler)
             .and()
                 .rememberMe()
             .and()

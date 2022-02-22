@@ -30,9 +30,6 @@ public class SeanceService {
     @Autowired
     private MovieService movieService;
 
-    @Autowired
-    private EntityManager em;
-
     public List<Seance> seanceList(Cinema cinema){
         return seanceRepository.findByCinema(cinema);
     }

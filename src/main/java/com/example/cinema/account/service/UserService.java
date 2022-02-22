@@ -1,12 +1,11 @@
 package com.example.cinema.account.service;
 
-import com.example.cinema.account.model.ConfirmationToken;
-import com.example.cinema.account.model.PasswordResetToken;
-import com.example.cinema.account.model.Role;
-import com.example.cinema.account.model.User;
+import com.example.cinema.account.model.*;
 import com.example.cinema.account.repository.UserRepository;
 import com.example.cinema.admin.dto.UserUpdateDto;
 import com.example.cinema.admin.service.FirebaseImageService;
+import com.example.cinema.cinema.repository.ReservationRepository;
+import com.example.cinema.cinema.service.ReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
@@ -46,6 +45,9 @@ public class UserService implements UserDetailsService {
 
     @Autowired
     private FirebaseImageService firebaseImageService;
+
+    @Autowired
+    private ReservationService reservationService;
 
     @Autowired
     @Qualifier("sessionRegistry")
@@ -179,14 +181,17 @@ public class UserService implements UserDetailsService {
     public void deleteUser(User user){
         var conf_tokens = confirmationTokenService.findByUser(user);
         var reset_tokens = resetTokenService.findByUser(user);
+        var reservations = reservationService.findAllByUser(user);
 
-        for(var token : conf_tokens){
+        for(var token : conf_tokens)
             confirmationTokenService.deleteConfirmationToken(token.getId());
-        }
 
-        for(var token : reset_tokens){
+        for(var token : reset_tokens)
             resetTokenService.deletePasswordResetToken(token.getId());
-        }
+
+        for(var reservation : reservations)
+            reservationService.removeReservation(reservation);
+
         expireUserSessions(user);
 
         userRepository.delete(user);
@@ -226,7 +231,7 @@ public class UserService implements UserDetailsService {
         if (!StringUtils.isEmpty(user.getEmail())) {
             if(type.equals("confirm")) {
                 message = String.format(
-                        "Hello, %s! \nWelcome to site. Please, visit next link: %s/confirm/%s",
+                        "Hello, %s! \nWelcome to site. Please, visit next link: %s/confirm/%s\n\nYour A.Movie",
                         user.getUsername(), baseUrl, token
                 );
 
@@ -240,7 +245,7 @@ public class UserService implements UserDetailsService {
                         + "Click the link below to change your password:\n"
                         + "%s/reset-password/%s\n"
                         + "Ignore this email if you do remember your password, "
-                        + "or you have not made the request.",
+                        + "or you have not made the request.\n\nYour A.Movie",
                         user.getUsername(), baseUrl, token
                 );
 

@@ -91,7 +91,7 @@
 
                                 <div class="col-12 col-sm-6 col-lg-6">
                                     <div class="form__group">
-                                        <input name="latitude" type="number" step="0.01" class="form__input ${(latitudeError??)?string('is-invalid', '')}"
+                                        <input name="latitude" type="number" step="0.0000000000000001" class="form__input ${(latitudeError??)?string('is-invalid', '')}"
                                                placeholder="Latitude" value="<#if cinema??>${(cinema.latitude?c)!''}</#if>">
 
                                         <#if latitudeError??>
@@ -105,7 +105,7 @@
 
                                 <div class="col-12 col-sm-6 col-lg-6">
                                     <div class="form__group">
-                                        <input name="longitude" type="number" step="0.01" class="form__input ${(longitudeError??)?string('is-invalid', '')}"
+                                        <input name="longitude" type="number" step="0.0000000000000001" class="form__input ${(longitudeError??)?string('is-invalid', '')}"
                                                placeholder="Longitude" value="<#if cinema??>${(cinema.longitude?c)!''}</#if>">
 
                                         <#if longitudeError??>
@@ -150,6 +150,8 @@
                         <div class="col-12">
                             <div class="row">
                                 <div class="col-12">
+                                    <div id='cinema-map'></div>
+
                                     <div class="form__gallery">
                                         <label id="gallery1" for="form__gallery-upload">Upload photos</label>
                                         <input data-name="#gallery1" id="form__gallery-upload" name="images" class="form__gallery-upload" type="file" accept=".png, .jpg, .jpeg" multiple>
@@ -397,3 +399,104 @@
         activeField.prop("checked", false);
     }
 </script>
+
+<script>
+    function initialize() {
+        var slat, slng;
+        <#if cinema?? && cinema.latitude?? && cinema.longitude??>
+            slat = ${cinema.latitude?c};
+            slng = ${cinema.longitude?c};
+        <#else>
+            slat = 50.4385;
+            slng = 30.5334;
+        </#if>
+        console.log(slat, " ", slng);
+        var mapOptions, map, marker, searchBox,
+            infoWindow = '',
+            addressEl = document.querySelector('input[name="address"]' ),
+            latEl = document.querySelector('input[name="latitude"]'),
+            longEl = document.querySelector('input[name="longitude"]'),
+            element = document.getElementById('cinema-map');
+
+        mapOptions = {
+            zoom: 10,
+            center: new google.maps.LatLng(slat, slng),
+            navigationControl: false,
+            streetViewControl: false,
+            mapTypeControl: false,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+
+        map = new google.maps.Map(element, mapOptions);
+
+        marker = new google.maps.Marker({
+            position: mapOptions.center,
+            map: map,
+            draggable: true
+        });
+
+        searchBox = new google.maps.places.SearchBox( addressEl );
+
+        google.maps.event.addListener( searchBox, 'places_changed', function () {
+            var places = searchBox.getPlaces(),
+                bounds = new google.maps.LatLngBounds(),
+                i, place, lat, long;
+                addresss = places[0].formatted_address;
+
+            for(i = 0; place = places[i]; i++ ) {
+                bounds.extend( place.geometry.location );
+                marker.setPosition( place.geometry.location );
+            }
+
+            map.fitBounds( bounds );
+            map.setZoom( 15 );
+
+            lat = marker.getPosition().lat();
+            long = marker.getPosition().lng();
+            latEl.value = lat;
+            longEl.value = long;
+
+            if (infoWindow){
+                infoWindow.close();
+            }
+
+            infoWindow = new google.maps.InfoWindow({
+                content: addresss
+            });
+
+            infoWindow.open(map, marker);
+        });
+
+        google.maps.event.addListener(marker, "dragend", function (event) {
+            var lat, long, address, resultArray;
+
+            lat = marker.getPosition().lat();
+            long = marker.getPosition().lng();
+
+            var geocoder = new google.maps.Geocoder();
+            geocoder.geocode( { latLng: marker.getPosition() }, function (result, status) {
+                if ('OK' === status){
+                    address = result[0].formatted_address;
+                    resultArray =  result[0].address_components;
+                    addressEl.value = address;
+                    latEl.value = lat;
+                    longEl.value = long;
+                } else {
+                    console.log('Geocode was not successful for the following reason: ' + status );
+                }
+
+                if (infoWindow) {
+                    infoWindow.close();
+                }
+
+                infoWindow = new google.maps.InfoWindow({
+                    content: address
+                });
+
+                infoWindow.open(map, marker);
+            });
+        });
+    }
+</script>
+
+<script async defer src="https://maps.google.com/maps/api/js?key=AIzaSyDmTU3PdXiLiXqNDbHDOeEfCU4iq7UShDE&libraries=places&callback=initialize&language=en"></script>

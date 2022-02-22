@@ -125,6 +125,15 @@ public interface MovieRepository extends JpaRepository<Movie, Long> {
             "order by m.release asc, m.title asc ")
     List<MovieDto> findMoviesOrderByComing(@Param("user") User user, @Param("from") Integer from, @Param("to") Integer to);
 
+    @Query("select new com.example.cinema.admin.dto.AdminMovieDto(" +
+            "   m," +
+            "   avg(r.value)" +
+            ") " +
+            "from Movie m left join m.ratings r " +
+            "where m.release > CURRENT_DATE and m.category = :category " +
+            "group by m order by m.release asc, m.title asc ")
+    List<AdminMovieDto> findComingSoon(@Param("category") Category category);
+
     @Query("select c from Company c left join c.movies movies " +
             "group by c order by count(movies) desc, c.name asc")
     List<Company> getPopularCompanies();

@@ -138,7 +138,7 @@
 
                                 <div class="comment">
                                     <div class="comment__images">
-                                        <img alt='' src="images/comment/avatar.jpg">
+                                        <img alt='' src="/static/main/images/comment/avatar.jpg">
                                     </div>
 
                                     <a href='#' class="comment__author"><span class="social-used fa fa-facebook"></span>Roberta Inetti</a>
@@ -149,7 +149,7 @@
 
                                 <div class="comment">
                                     <div class="comment__images">
-                                        <img alt='' src="images/comment/avatar-olia.jpg">
+                                        <img alt='' src="/static/main/images/comment/avatar-olia.jpg">
                                     </div>
 
                                     <a href='#' class="comment__author"><span class="social-used fa fa-vk"></span>Olia Gozha</a>
@@ -160,7 +160,7 @@
 
                                 <div class="comment comment--answer">
                                     <div class="comment__images">
-                                        <img alt='' src="images/comment/avatar-dmitriy.jpg">
+                                        <img alt='' src="/static/main/images/comment/avatar-dmitriy.jpg">
                                     </div>
 
                                     <a href='#' class="comment__author"><span class="social-used fa fa-vk"></span>Dmitriy Pustovalov</a>
@@ -171,7 +171,7 @@
 
                                 <div class="comment comment--last">
                                     <div class="comment__images">
-                                        <img alt='' src="images/comment/avatar-sia.jpg">
+                                        <img alt='' src="/static/main/images/comment/avatar-sia.jpg">
                                     </div>
 
                                     <a href='#' class="comment__author"><span class="social-used fa fa-facebook"></span>Sia Andrews</a>
@@ -183,7 +183,7 @@
                                 <div id='hide-comments' class="hide-comments">
                                     <div class="comment">
                                         <div class="comment__images">
-                                            <img alt='' src="images/comment/avatar.jpg">
+                                            <img alt='' src="/static/main/images/comment/avatar.jpg">
                                         </div>
 
                                         <a href='#' class="comment__author"><span class="social-used fa fa-facebook"></span>Roberta Inetti</a>
@@ -194,7 +194,7 @@
 
                                     <div class="comment">
                                         <div class="comment__images">
-                                            <img alt='' src="images/comment/avatar-olia.jpg">
+                                            <img alt='' src="/static/main/images/comment/avatar-olia.jpg">
                                         </div>
 
                                         <a href='#' class="comment__author"><span class="social-used fa fa-vk"></span>Olia Gozha</a>
@@ -260,7 +260,10 @@
     <script src="/static/main/js/external/idangerous.swiper.min.js"></script>
     <!-- Magnific-popup -->
     <script src="/static/main/js/external/jquery.magnific-popup.min.js"></script>
-
+    <!--*** Google map  ***-->
+    <script src="https://maps.google.com/maps/api/js?key=AIzaSyDmTU3PdXiLiXqNDbHDOeEfCU4iq7UShDE&language=en"></script>
+    <!--*** Google map infobox  ***-->
+    <script src="/static/main/js/external/infobox.js"></script>
     <!-- Form element -->
     <script src="/static/main/js/external/form-element.js"></script>
 
@@ -303,5 +306,67 @@
             });
         }
         </#if>
+    </script>
+
+    <script>
+        //4. Init map
+
+        var mapOptions = {
+            scaleControl: true,
+            center: new google.maps.LatLng(${cinema.latitude?c}, ${cinema.longitude?c}),
+            zoom: 16,
+            navigationControl: false,
+            streetViewControl: false,
+            mapTypeControl: false,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+
+        var map = new google.maps.Map(document.getElementById('cinema-map'),mapOptions);
+        var marker = new google.maps.Marker({
+            map: map,
+            position: map.getCenter()
+        });
+
+        // Maker
+
+        //Creates the information to go in the pop-up info box.
+        var boxTextA = document.createElement("div");
+        boxTextA.innerHTML = '<span class="pop_up_box_text">${cinema.name}</span>';
+
+        //Sets up the configuration options of the pop-up info box.
+        var infoboxOptionsA = {
+            content: boxTextA
+            ,disableAutoPan: false
+            ,maxWidth: 0
+            ,pixelOffset: new google.maps.Size(30, -50)
+            ,zIndex: null
+            ,boxStyle: {
+                background: "#4c4145"
+                ,opacity: 1
+                ,width: "300px"
+                ,color: " #b4b1b2"
+                ,fontSize:"13px"
+                ,padding:'14px 20px 15px'
+            }
+            ,closeBoxMargin: "6px 2px 2px 2px"
+            ,infoBoxClearance: new google.maps.Size(1, 1)
+            ,closeBoxURL: "/static/main/images/components/close.svg"
+            ,isHidden: false
+            ,pane: "floatPane"
+            ,enableEventPropagation: false
+        };
+
+
+        //Creates the pop-up infobox for Glastonbury, adding the configuration options set above.
+        var infoboxA = new InfoBox(infoboxOptionsA);
+
+
+        //Add an 'event listener' to the Glastonbury map marker to listen out for when it is clicked.
+        google.maps.event.addListener(marker, "click", function (e) {
+            //Open the Glastonbury info box.
+            infoboxA.open(map, this);
+            //Sets the Glastonbury marker to be the center of the map.
+            map.setCenter(marker.getPosition());
+        });
     </script>
 </@c.page>

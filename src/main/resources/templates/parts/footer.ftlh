@@ -25,12 +25,12 @@
                 <p class="heading-special--small">A.Movie<br><span class="title-edition">in the social media</span></p>
 
                 <div class="social">
-                    <a href='#' class="social__variant fa fa-facebook"></a>
-                    <a href='#' class="social__variant fa fa-twitter"></a>
-                    <a href='#' class="social__variant fa fa-vk"></a>
-                    <a href='#' class="social__variant fa fa-instagram"></a>
-                    <a href='#' class="social__variant fa fa-tumblr"></a>
-                    <a href='#' class="social__variant fa fa-pinterest"></a>
+                    <a href='#' class="social__variant fab fa-facebook-f"></a>
+                    <a href='#' class="social__variant fab fa-twitter"></a>
+                    <a href='#' class="social__variant fab fa-vk"></a>
+                    <a href='#' class="social__variant fab fa-instagram"></a>
+                    <a href='#' class="social__variant fab fa-tumblr"></a>
+                    <a href='#' class="social__variant fab fa-pinterest"></a>
                 </div>
 
                 <div class="clearfix"></div>
