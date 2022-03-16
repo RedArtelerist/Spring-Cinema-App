@@ -36,7 +36,7 @@ public interface MovieRepository extends JpaRepository<Movie, Long> {
             "where lower(m.title) LIKE %?1% " +
             "and m.release <= CURRENT_DATE " +
             "group by m " +
-            "order by avg(r.value) desc ")
+            "order by coalesce(avg(r.value), 0) desc, m.title asc")
     Page<AdminMovieDto> findMoviesForAdminOrderByRating(String search, Pageable pageable);
 
     @Query("select new com.example.cinema.admin.dto.AdminMovieDto(" +

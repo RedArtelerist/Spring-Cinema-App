@@ -81,8 +81,15 @@ public interface SeanceRepository extends JpaRepository<Seance, Long> {
     @Query("select s from Seance s where s.hall.cinema = :cinema and s.date = :date order by s.startTime")
     List<Seance> findByCinemaAndDate(@Param("cinema") Cinema cinema, @Param("date") Date date);
 
+    @Query("select s from Seance s where s.hall.cinema = :cinema " +
+            "and s.movie.id = :movieId and s.date = :date order by s.startTime")
+    List<Seance> findByCinemaAndDateAndMovie(
+            @Param("cinema") Cinema cinema, @Param("movieId") Long movieId, @Param("date") Date date
+    );
+
     @Query("select s from Seance s where s.movie.id = :movieId and " +
-            "s.hall.cinema.city = :city and s.date = :date order by s.startTime")
+            "s.hall.cinema.city = :city and s.date = :date " +
+            "and s.available = true order by s.startTime")
     List<Seance> findByMovieAndCityAndDate(
             @Param("movieId") Long movieId, @Param("city") City city, @Param("date") Date date
     );

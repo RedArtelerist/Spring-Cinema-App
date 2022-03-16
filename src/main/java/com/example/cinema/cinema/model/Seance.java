@@ -147,4 +147,11 @@ public class Seance {
         }
         return false;
     }
+
+    public int countAvailableSeats(){
+        int count = 0;
+        for(var reservation : reservations)
+            count += reservation.getSeats().size();
+        return hall.getNumSeats() - count;
+    }
 }

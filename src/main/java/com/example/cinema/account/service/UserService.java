@@ -4,8 +4,8 @@ import com.example.cinema.account.model.*;
 import com.example.cinema.account.repository.UserRepository;
 import com.example.cinema.admin.dto.UserUpdateDto;
 import com.example.cinema.admin.service.FirebaseImageService;
-import com.example.cinema.cinema.repository.ReservationRepository;
 import com.example.cinema.cinema.service.ReservationService;
+import com.example.cinema.telegrambot.dto.LoginDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
@@ -85,6 +85,11 @@ public class UserService implements UserDetailsService {
         return optionalUser.orElse(null);
     }
 
+    public User findByTelegramId(Long id){
+        Optional<User> optionalUser = userRepository.findByTelegramId(id);
+        return optionalUser.orElse(null);
+    }
+
     @Override
     public User loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<User> optionalUser = userRepository.findByUsernameIgnoreCase(username);
@@ -110,6 +115,12 @@ public class UserService implements UserDetailsService {
                     MessageFormat.format("User with email {0} cannot be found.", email)
             );
         }
+    }
+
+    public User findByEmailOrUsername(String username){
+        Optional<User> optionalUser1 = userRepository.findByUsernameIgnoreCase(username);
+        Optional<User> optionalUser2 = userRepository.findByEmail(username);
+        return optionalUser1.orElseGet(() -> optionalUser2.orElse(null));
     }
 
     public void signUpUser(User user) throws Exception {
@@ -148,6 +159,34 @@ public class UserService implements UserDetailsService {
         user_to_edit.setRoles(user.getRoles());
 
         userRepository.save(user_to_edit);
+    }
+
+    public String setUserTelegramId(LoginDto loginDto, Long tgId) throws Exception {
+        User user;
+        Optional<User> optionalUser1 = userRepository.findByUsernameIgnoreCase(loginDto.getUsername());
+        Optional<User> optionalUser2 = userRepository.findByEmail(loginDto.getUsername());
+
+        if(optionalUser1.isPresent())
+            user = optionalUser1.get();
+        else if(optionalUser2.isPresent())
+            user = optionalUser2.get();
+        else
+            throw new Exception("User not found");
+
+        String password = user.getPassword();
+
+        if(passwordEncoder.matches(loginDto.getPassword(), password)){
+            User userByTg = userRepository.findByTelegramId(tgId).orElse(null);
+            if(userByTg != null){
+                userByTg.setTelegramId(null);
+                userRepository.save(userByTg);
+            }
+            user.setTelegramId(tgId);
+            userRepository.save(user);
+            return user.getUsername();
+        }
+        else
+            throw new Exception("Wrong password for this account");
     }
 
     public void confirmUser(ConfirmationToken confirmationToken) {

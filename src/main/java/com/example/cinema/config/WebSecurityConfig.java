@@ -2,8 +2,8 @@ package com.example.cinema.config;
 
 import com.example.cinema.account.service.CustomOAuth2UserService;
 import com.example.cinema.account.service.UserService;
-import com.example.cinema.component.OAuthAuthenticationFailureHandler;
-import com.example.cinema.component.OAuthLoginSuccessHandler;
+import com.example.cinema.component.handler.OAuthAuthenticationFailureHandler;
+import com.example.cinema.component.handler.OAuthLoginSuccessHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -56,11 +56,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.cors()
-            .and().csrf()
+            .and().csrf().ignoringAntMatchers("/")
             .and()
                 .authorizeRequests()
                     .antMatchers("/registration").not().fullyAuthenticated()
-                    .antMatchers("/", "/static/**", "/confirm/*", "/navigator/**", "/item/**", "/star/**").permitAll()
+                    .antMatchers("/", "/static/**", "/confirm/**", "/navigator/**", "/item/**", "/star/**").permitAll()
                     .antMatchers("/user/**", "/cinemas", "/cinema/**", "/seance/**", "/reservation/**", "/oauth2/**").permitAll()
                     .antMatchers("/forgot-password", "/reset-password/**").not().fullyAuthenticated()
                     .antMatchers("/admin/**").hasAnyAuthority("ADMIN", "OWNER")

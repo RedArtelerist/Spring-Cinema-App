@@ -50,7 +50,7 @@ public class CinemaService {
 
         List<Cinema> cinemas;
         try {
-            cinemas = cinemaRepository.findByCity(City.valueOf(city), search, sorting);
+            cinemas = cinemaRepository.findByCityAndSearch(City.valueOf(city), search, sorting);
         }
         catch (Exception ex){
             cinemas = cinemaRepository.findAll(search, sorting);

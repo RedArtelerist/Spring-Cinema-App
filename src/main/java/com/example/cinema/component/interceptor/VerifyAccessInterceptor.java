@@ -1,4 +1,4 @@
-package com.example.cinema.component;
+package com.example.cinema.component.interceptor;
 
 import com.example.cinema.account.model.User;
 import com.example.cinema.account.service.UserService;

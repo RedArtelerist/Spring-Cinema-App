@@ -25,5 +25,8 @@ public interface CinemaRepository extends JpaRepository<Cinema, Long> {
     List<Cinema> findAll(@Param("key") String search, Sort sort);
 
     @Query("select c from Cinema c where c.city = :city and c.active = true and lower(c.name) like %:key%")
-    List<Cinema> findByCity(@Param("city") City city, @Param("key") String search, Sort sort);
+    List<Cinema> findByCityAndSearch(@Param("city") City city, @Param("key") String search, Sort sort);
+
+    @Query("select c from Cinema  c where c.city = :city order by c.name")
+    List<Cinema> findByCity(@Param("city") City city);
 }

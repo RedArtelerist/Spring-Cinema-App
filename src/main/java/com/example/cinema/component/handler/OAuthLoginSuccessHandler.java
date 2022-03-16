@@ -1,4 +1,4 @@
-package com.example.cinema.component;
+package com.example.cinema.component.handler;
 
 import com.example.cinema.account.model.User;
 import com.example.cinema.account.repository.UserRepository;

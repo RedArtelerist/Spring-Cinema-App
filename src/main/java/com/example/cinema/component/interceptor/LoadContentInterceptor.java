@@ -1,4 +1,4 @@
-package com.example.cinema.component;
+package com.example.cinema.component.interceptor;
 
 import com.example.cinema.admin.model.Category;
 import com.example.cinema.admin.repository.MovieRepository;

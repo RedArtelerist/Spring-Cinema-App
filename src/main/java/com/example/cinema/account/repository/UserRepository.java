@@ -20,6 +20,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findByEmail(String email);
 
+    @Query("select u from User u where u.telegramId = :id and u.active = true and u.locked = false")
+    Optional<User> findByTelegramId(@Param("id") Long id);
+
     @Query("SELECT u FROM User u WHERE lower(u.username) LIKE %?1%"
             + " OR lower(u.firstName) LIKE %?1%"
             + " OR lower(u.lastName) LIKE %?1%"

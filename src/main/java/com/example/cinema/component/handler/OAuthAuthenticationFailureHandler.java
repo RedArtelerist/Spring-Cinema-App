@@ -1,4 +1,4 @@
-package com.example.cinema.component;
+package com.example.cinema.component.handler;
 
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;

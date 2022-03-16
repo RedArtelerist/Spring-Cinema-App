@@ -7,20 +7,28 @@ import com.example.cinema.cinema.model.Reservation;
 import com.example.cinema.cinema.model.Ticket;
 import com.example.cinema.cinema.repository.ReservationRepository;
 import com.example.cinema.cinema.repository.TicketRepository;
+import com.example.cinema.telegrambot.dto.Emojis;
+import com.example.cinema.telegrambot.model.TelegramBot;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service
 public class TicketService {
     @Autowired
     private TicketRepository ticketRepository;
+    @Autowired
+    @Lazy
+    private TelegramBot telegramBot;
 
     @Autowired
     private ReservationRepository reservationRepository;
@@ -63,7 +71,6 @@ public class TicketService {
             number = generateNumber();
 
         Ticket ticket = new Ticket();
-
         ticket.setNumber(number);
         ticket.setEmail(checkoutDto.getEmail());
         ticket.setFirstName(checkoutDto.getFirstName());
@@ -86,6 +93,7 @@ public class TicketService {
         ticket.setSeats(String.join(",", seats));
 
         ticketRepository.save(ticket);
+        sendInTelegram(ticket);
 
         reservation.setExpired(dateTime(reservation.getSeance().getDate(), reservation.getSeance().getEndTime()));
         reservation.setActive(false);
@@ -125,5 +133,34 @@ public class TicketService {
         aDateTime.set(Calendar.SECOND, aTime.get(Calendar.SECOND));
 
         return aDateTime.getTime();
+    }
+
+    private void sendInTelegram(Ticket ticket){
+        if(ticket.getUser() != null) {
+            Long tgId = ticket.getUser().getTelegramId();
+            if (tgId != null) {
+                SendMessage sendMessage = new SendMessage();
+                sendMessage.setChatId(String.valueOf(tgId));
+                sendMessage.setText(Emojis.INFO_MARK + " Hello," + ticket.getUser().getUsername() +
+                        ". You just bought a ticket, here are the details");
+                telegramBot.sendMessage(sendMessage);
+
+                StringBuilder builder = new StringBuilder();
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm");
+                Date date = ticket.getDate();
+                String dateFormat = simpleDateFormat.format(date);
+
+                builder.append(Emojis.TICKET ).append(" ").append(ticket.getNumber()).append("\n")
+                        .append(Emojis.CINEMA).append(" ").append(ticket.getHall().getCinema().getName()).append(", ")
+                        .append("Hall: ").append(ticket.getHall().getName()).append("\n")
+                        .append(Emojis.MOVIE).append(" ").append(ticket.getMovie().getTitle()).append("\n")
+                        .append(Emojis.DATE).append(" ").append(dateFormat).append("\n")
+                        .append(Emojis.SEAT).append(" ").append(ticket.getSeats()).append("\n")
+                        .append(Emojis.PRICE).append(" ").append("₴").append(ticket.getPrice());
+
+                sendMessage.setText(builder.toString());
+                telegramBot.sendMessage(sendMessage);
+            }
+        }
     }
 }
