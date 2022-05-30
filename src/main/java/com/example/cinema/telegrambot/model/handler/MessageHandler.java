@@ -1,13 +1,12 @@
 package com.example.cinema.telegrambot.model.handler;
 
-import com.example.cinema.account.service.UserService;
 import com.example.cinema.telegrambot.cash.BotStateCash;
 import com.example.cinema.telegrambot.cash.LoginCash;
 import com.example.cinema.telegrambot.cash.SearchCash;
-import com.example.cinema.telegrambot.model.BotState;
 import com.example.cinema.telegrambot.dto.Emojis;
 import com.example.cinema.telegrambot.dto.LoginDto;
 import com.example.cinema.telegrambot.dto.SearchDto;
+import com.example.cinema.telegrambot.model.BotState;
 import com.example.cinema.telegrambot.service.MenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -17,8 +16,6 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 
 @Component
 public class MessageHandler {
-    @Autowired
-    private UserService userService;
     @Autowired
     private MenuService menuService;
     @Autowired
@@ -56,15 +53,8 @@ public class MessageHandler {
             case ("MY_TICKETS"):
                 return eventHandler.myTicketHandler(message, userId);
             case ("FIND_SEANCE"):
-                botStateCash.saveBotState(userId, BotState.ENTER_CITY);
                 searchCash.saveSearchCash(userId, new SearchDto());
-                return eventHandler.sendCityList(userId);
-            case ("ENTER_CITY"):
-                return eventHandler.enterCityHandler(message, userId);
-            case ("ENTER_CINEMA"):
-                return eventHandler.enterCinemaHandler(message, userId);
-            case ("ENTER_MOVIE"):
-                return eventHandler.enterMovieHandler(message, userId);
+                return eventHandler.sendCityList(message.getChatId());
             case ("ENTER_DATE"):
                 return eventHandler.enterDateHandler(message, userId);
             default:

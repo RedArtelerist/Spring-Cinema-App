@@ -125,7 +125,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="tab-pane" id="comment1">
+                <#--<div class="tab-pane" id="comment1">
                     <div class="container">
                         <div class="comment-wrapper">
                             <form id="comment-form" class="comment-form" method='post'>
@@ -211,7 +211,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div>-->
 
                 <div class="tab-pane" id="map1">
                     <div id='cinema-map' class="map"></div>

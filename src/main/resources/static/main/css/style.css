@@ -4630,7 +4630,6 @@ ul#navigation a:hover {
 }
 .comment-form .comment-form__btn {
   float: right;
-  margin-top: 9px;
 }
 .comment {
   position: relative;
@@ -11599,7 +11598,7 @@ mark {
   margin:0;
   display: flex;
   position: absolute;
-  bottom: -24px;
+  bottom: -28px;
   right: 0;
 }
 
@@ -11620,7 +11619,7 @@ mark {
 }
 
 .media-detail-com{
-  margin-top: 15px;
+  margin-top: 5px;
 }
 
 .media-detail-com .like i:hover, .media-detail-rep .like i:hover{

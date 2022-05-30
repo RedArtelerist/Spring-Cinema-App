@@ -1,10 +1,15 @@
 package com.example.cinema.telegrambot.service;
 
+import com.example.cinema.admin.dto.AdminMovieDto;
+import com.example.cinema.cinema.model.Cinema;
+import com.example.cinema.cinema.model.City;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 
@@ -52,5 +57,59 @@ public class MenuService {
             sendMessage.setReplyMarkup(replyKeyboardMarkup);
         }
         return sendMessage;
+    }
+
+    public InlineKeyboardMarkup getInlineMessageButtonsForCity(List<City> cities) {
+        InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
+        List<InlineKeyboardButton> keyboardButtonsRow = new ArrayList<>();
+
+        for(var city : cities){
+            InlineKeyboardButton button = new InlineKeyboardButton();
+            button.setText(city.toString());
+            button.setCallbackData("city:" + city.toString());
+            keyboardButtonsRow.add(button);
+        }
+
+        List<List<InlineKeyboardButton>> rowList = new ArrayList<>();
+        rowList.add(keyboardButtonsRow);
+        inlineKeyboardMarkup.setKeyboard(rowList);
+
+        return inlineKeyboardMarkup;
+    }
+
+    public InlineKeyboardMarkup getInlineMessageButtonsForCinemas(List<Cinema> cinemas) {
+        InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
+        List<List<InlineKeyboardButton>> rowList = new ArrayList<>();
+
+        for(var cinema : cinemas){
+            List<InlineKeyboardButton> keyboardButtonsRow = new ArrayList<>();
+            InlineKeyboardButton button = new InlineKeyboardButton();
+            button.setText(cinema.getName());
+            button.setCallbackData("cinema:" + cinema.getId());
+            keyboardButtonsRow.add(button);
+            rowList.add(keyboardButtonsRow);
+        }
+
+        inlineKeyboardMarkup.setKeyboard(rowList);
+
+        return inlineKeyboardMarkup;
+    }
+
+    public InlineKeyboardMarkup getInlineMessageButtonsForMovies(List<AdminMovieDto> movies) {
+        InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
+        List<List<InlineKeyboardButton>> rowList = new ArrayList<>();
+
+        for(var movie : movies){
+            List<InlineKeyboardButton> keyboardButtonsRow = new ArrayList<>();
+            InlineKeyboardButton button = new InlineKeyboardButton();
+            button.setText(movie.getTitle());
+            button.setCallbackData("movie:" + movie.getId());
+            keyboardButtonsRow.add(button);
+            rowList.add(keyboardButtonsRow);
+        }
+
+        inlineKeyboardMarkup.setKeyboard(rowList);
+
+        return inlineKeyboardMarkup;
     }
 }

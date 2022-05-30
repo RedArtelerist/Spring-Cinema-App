@@ -337,13 +337,6 @@
                                     <p class="comment__date">${comment.createdAt?string["dd.MM.yyyy"]} | ${comment.createdAt?string["HH:mm"]}</p>
                                     <p class="comment__message">${comment.text}</p>
                                     <a class="comment__reply" data-id="${comment.id}">Reply</a>
-                                    <#if name != "unknown" && currentUserId == comment.user.id>
-                                        <form action="/item/${item.id}/comment/${comment.id}/delete" method="post">
-                                            <input type="hidden" value="${_csrf.token}" name="_csrf">
-                                            <button type="submit" class="comment__delete"></button>
-                                        </form>
-                                    </#if>
-
                                     <ul class="list-unstyled list-inline media-detail-com">
                                         <li title="Like">
                                             <span data-icon="like" class="like <#if comment.meLiked(user)>liked<#else>default</#if>">
@@ -358,6 +351,12 @@
                                             <span data-count="dislike">${comment.countDislikes()}</span>
                                         </li>
                                     </ul>
+                                    <#if name != "unknown" && currentUserId == comment.user.id>
+                                        <form action="/item/${item.id}/comment/${comment.id}/delete" method="post">
+                                            <input type="hidden" value="${_csrf.token}" name="_csrf">
+                                            <button type="submit" class="comment__delete"></button>
+                                        </form>
+                                    </#if>
                                 </div>
                                 <#list comment.replies as reply>
                                     <div class="comment comment--answer">
@@ -857,6 +856,7 @@
 
     </script>
 
+    <#if cinema_seances??>
     <script>
         <#assign center = cinema_seances?keys[0]>
 
@@ -919,5 +919,6 @@
             });
         </#list>
     </script>
+    </#if>
 
 </@c.page>

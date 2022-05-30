@@ -186,28 +186,28 @@
                                                     <input type="radio" value="9" name="item-${item?index}-rating" id="item-${item?index}-rating-9"
                                                            <#if item.myRate != 0 && item.myRate == 9>checked</#if> onchange="vote(this, ${item.id})">
                                                     <label for="item-${item?index}-rating-9" class="fas fa-star"></label>
-                                                    <input type="radio" value="8" name="item-${item?index}rating" id="item-${item?index}-rating-8"
+                                                    <input type="radio" value="8" name="item-${item?index}-rating" id="item-${item?index}-rating-8"
                                                            <#if item.myRate != 0 && item.myRate == 8>checked</#if> onchange="vote(this, ${item.id})">
                                                     <label for="item-${item?index}-rating-8" class="fas fa-star"></label>
-                                                    <input type="radio" value="7" name="item-${item?index}rating" id="item-${item?index}-rating-7"
+                                                    <input type="radio" value="7" name="item-${item?index}-rating" id="item-${item?index}-rating-7"
                                                            <#if item.myRate != 0 && item.myRate == 7>checked</#if> onchange="vote(this, ${item.id})">
                                                     <label for="item-${item?index}-rating-7" class="fas fa-star"></label>
-                                                    <input type="radio" value="6" name="item-${item?index}rating" id="item-${item?index}-rating-6"
+                                                    <input type="radio" value="6" name="item-${item?index}-rating" id="item-${item?index}-rating-6"
                                                            <#if item.myRate != 0 && item.myRate == 6>checked</#if> onchange="vote(this, ${item.id})">
                                                     <label for="item-${item?index}-rating-6" class="fas fa-star"></label>
-                                                    <input type="radio" value="5" name="item-${item?index}rating" id="item-${item?index}-rating-5"
+                                                    <input type="radio" value="5" name="item-${item?index}-rating" id="item-${item?index}-rating-5"
                                                            <#if item.myRate != 0 && item.myRate == 5>checked</#if> onchange="vote(this, ${item.id})">
                                                     <label for="item-${item?index}-rating-5" class="fas fa-star"></label>
-                                                    <input type="radio" value="4" name="item-${item?index}rating" id="item-${item?index}-rating-4"
+                                                    <input type="radio" value="4" name="item-${item?index}-rating" id="item-${item?index}-rating-4"
                                                            <#if item.myRate != 0 && item.myRate == 4>checked</#if> onchange="vote(this, ${item.id})">
                                                     <label for="item-${item?index}-rating-4" class="fas fa-star"></label>
-                                                    <input type="radio" value="3" name="item-${item?index}rating" id="item-${item?index}-rating-3"
+                                                    <input type="radio" value="3" name="item-${item?index}-rating" id="item-${item?index}-rating-3"
                                                            <#if item.myRate != 0 && item.myRate == 3>checked</#if> onchange="vote(this, ${item.id})">
                                                     <label for="item-${item?index}-rating-3" class="fas fa-star"></label>
-                                                    <input type="radio" value="2" name="item-${item?index}rating" id="item-${item?index}-rating-2"
+                                                    <input type="radio" value="2" name="item-${item?index}-rating" id="item-${item?index}-rating-2"
                                                            <#if item.myRate != 0 && item.myRate == 2>checked</#if> onchange="vote(this, ${item.id})">
                                                     <label for="item-${item?index}-rating-2" class="fas fa-star"></label>
-                                                    <input type="radio" value="1" name="item-${item?index}rating" id="item-${item?index}-rating-1"
+                                                    <input type="radio" value="1" name="item-${item?index}-rating" id="item-${item?index}-rating-1"
                                                            <#if item.myRate != 0 && item.myRate == 1>checked</#if> onchange="vote(this, ${item.id})">
                                                     <label for="item-${item?index}-rating-1" class="fas fa-star"></label>
                                                 </div>

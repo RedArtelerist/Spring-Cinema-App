@@ -643,77 +643,65 @@ function init_Contact () {
     "use strict";
 
 	//1. Fullscreen map init
-				//Init map
-                    var mapOptions = {
-                        scaleControl: true,
-                        center: new google.maps.LatLng(51.509708, -0.130539),
-                        zoom: 15,
-                        navigationControl: false,
-                        streetViewControl: false,
-                        mapTypeControl: false,
-                        mapTypeId: google.maps.MapTypeId.ROADMAP
-                    };
-                    var map = new google.maps.Map(document.getElementById('location-map'),mapOptions);
-                    var marker = new google.maps.Marker({
-                        map: map,
-                        position: map.getCenter() 
-                    });
+    //Init map
+    var mapOptions = {
+        scaleControl: true,
+        center: new google.maps.LatLng(50.426486, 30.554488),
+        zoom: 15,
+        navigationControl: false,
+        streetViewControl: false,
+        mapTypeControl: false,
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+    var map = new google.maps.Map(document.getElementById('location-map'),mapOptions);
+    var marker = new google.maps.Marker({
+        map: map,
+        position: map.getCenter()
+    });
 
-                    //Custome map style
-                    var map_style = [{stylers:[{saturation:-100},{gamma:3}]},{elementType:"labels.text.stroke",stylers:[{visibility:"off"}]},{featureType:"poi.business",elementType:"labels.text",stylers:[{visibility:"off"}]},{featureType:"poi.business",elementType:"labels.icon",stylers:[{visibility:"off"}]},{featureType:"poi.place_of_worship",elementType:"labels.text",stylers:[{visibility:"off"}]},{featureType:"poi.place_of_worship",elementType:"labels.icon",stylers:[{visibility:"off"}]},{featureType:"road",elementType:"geometry",stylers:[{visibility:"simplified"}]},{featureType:"water",stylers:[{visibility:"on"},{saturation:0},{gamma:2},{hue:"#aaaaaa"}]},{featureType:"administrative.neighborhood",elementType:"labels.text.fill",stylers:[{visibility:"off"}]},{featureType:"road.local",elementType:"labels.text",stylers:[{visibility:"off"}]},{featureType:"transit.station",elementType:"labels.icon",stylers:[{visibility:"off"}]}]
+    //=====================================
+    // Maker
+    //=====================================
 
-                    //Then we use this data to create the styles.
-                    var styled_map = new google.maps.StyledMapType(map_style, {name: "Cusmome style"});
+    //Creates the information to go in the pop-up info box.
+    var boxTextA = document.createElement("div");
+    boxTextA.innerHTML = '<span class="pop_up_box_text">Leicester Sq, London, WC2H 7LP</span>';
 
-                    map.mapTypes.set('map_styles', styled_map);
-                    map.setMapTypeId('map_styles');
-
-
-                    //=====================================
-
-                    // Maker
-
-                    //=====================================
-
-                    //Creates the information to go in the pop-up info box.
-                    var boxTextA = document.createElement("div");
-                    boxTextA.innerHTML = '<span class="pop_up_box_text">Leicester Sq, London, WC2H 7LP</span>';
-
-                    //Sets up the configuration options of the pop-up info box.
-                    var infoboxOptionsA = {
-                     content: boxTextA
-                     ,disableAutoPan: false
-                     ,maxWidth: 0
-                     ,pixelOffset: new google.maps.Size(30, -50)
-                     ,zIndex: null
-                     ,boxStyle: {
-                     background: "#4c4145"
-                     ,opacity: 1
-                     ,width: "300px"
-                     ,color: " #b4b1b2"
-                     ,fontSize:"13px"
-                     ,padding:'14px 20px 15px'
-                     }
-                     ,closeBoxMargin: "6px 2px 2px 2px"
-                     ,infoBoxClearance: new google.maps.Size(1, 1)
-                     ,closeBoxURL: "images/components/close.svg"
-                     ,isHidden: false
-                     ,pane: "floatPane"
-                     ,enableEventPropagation: false
-                    };
-
-                    
-                    //Creates the pop-up infobox for Glastonbury, adding the configuration options set above.
-                    var infoboxA = new InfoBox(infoboxOptionsA);
+    //Sets up the configuration options of the pop-up info box.
+    var infoboxOptionsA = {
+     content: boxTextA
+     ,disableAutoPan: false
+     ,maxWidth: 0
+     ,pixelOffset: new google.maps.Size(30, -50)
+     ,zIndex: null
+     ,boxStyle: {
+     background: "#4c4145"
+     ,opacity: 1
+     ,width: "300px"
+     ,color: " #b4b1b2"
+     ,fontSize:"13px"
+     ,padding:'14px 20px 15px'
+     }
+     ,closeBoxMargin: "6px 2px 2px 2px"
+     ,infoBoxClearance: new google.maps.Size(1, 1)
+     ,closeBoxURL: "images/components/close.svg"
+     ,isHidden: false
+     ,pane: "floatPane"
+     ,enableEventPropagation: false
+    };
 
 
-                    //Add an 'event listener' to the Glastonbury map marker to listen out for when it is clicked.
-                    google.maps.event.addListener(marker, "click", function (e) {
-                     //Open the Glastonbury info box.
-                     infoboxA.open(map, this);
-                     //Sets the Glastonbury marker to be the center of the map.
-                     map.setCenter(marker.getPosition());
-                    });
+    //Creates the pop-up infobox for Glastonbury, adding the configuration options set above.
+    var infoboxA = new InfoBox(infoboxOptionsA);
+
+
+    //Add an 'event listener' to the Glastonbury map marker to listen out for when it is clicked.
+    google.maps.event.addListener(marker, "click", function (e) {
+     //Open the Glastonbury info box.
+     infoboxA.open(map, this);
+     //Sets the Glastonbury marker to be the center of the map.
+     map.setCenter(marker.getPosition());
+    });
 }
 
 function init_Gallery () {

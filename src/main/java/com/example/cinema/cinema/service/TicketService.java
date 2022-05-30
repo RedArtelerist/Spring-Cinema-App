@@ -26,12 +26,13 @@ import java.util.*;
 public class TicketService {
     @Autowired
     private TicketRepository ticketRepository;
-    @Autowired
-    @Lazy
-    private TelegramBot telegramBot;
 
     @Autowired
     private ReservationRepository reservationRepository;
+
+    @Autowired
+    @Lazy
+    private TelegramBot telegramBot;
 
     public List<Ticket> ticketList(){
         return ticketRepository.findAll();

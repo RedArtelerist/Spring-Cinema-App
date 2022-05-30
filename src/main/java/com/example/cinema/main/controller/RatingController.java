@@ -37,17 +37,17 @@ public class RatingController {
             Movie item = movieService.getById(movieId);
 
             if(item == null)
-                return new ResponseEntity<Object>(new Error("Can't find item"), HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<>(new Error("Can't find item"), HttpStatus.BAD_REQUEST);
 
             if(item.getRelease().after(new Date()))
-                return new ResponseEntity<Object>(new Error("Item has not yet been released"), HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<>(new Error("Item has not yet been released"), HttpStatus.BAD_REQUEST);
 
             ratingService.setRating(user, item, value);
-            return new ResponseEntity<Object>("Rating was successfully saved", HttpStatus.OK);
+            return new ResponseEntity<>("Rating was successfully saved", HttpStatus.OK);
         }
         catch (Exception ex){
             System.out.print(ex.getMessage());
-            return new ResponseEntity<Object>(new Error(ex.getMessage()), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(new Error(ex.getMessage()), HttpStatus.BAD_REQUEST);
         }
     }
 

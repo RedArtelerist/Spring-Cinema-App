@@ -61,7 +61,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                     .antMatchers("/registration").not().fullyAuthenticated()
                     .antMatchers("/", "/static/**", "/confirm/**", "/navigator/**", "/item/**", "/star/**").permitAll()
-                    .antMatchers("/user/**", "/cinemas", "/cinema/**", "/seance/**", "/reservation/**", "/oauth2/**").permitAll()
+                    .antMatchers("/user/**", "/cinemas", "/cinema/**", "/seance/**", "/reservation/**", "/oauth2/**", "/contact-us").permitAll()
                     .antMatchers("/forgot-password", "/reset-password/**").not().fullyAuthenticated()
                     .antMatchers("/admin/**").hasAnyAuthority("ADMIN", "OWNER")
                     .anyRequest().authenticated()

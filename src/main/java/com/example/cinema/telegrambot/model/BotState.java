@@ -7,8 +7,5 @@ public enum BotState {
     ENTER_PASSWORD,
     MY_TICKETS,
     FIND_SEANCE,
-    ENTER_CITY,
-    ENTER_CINEMA,
-    ENTER_MOVIE,
     ENTER_DATE
 }

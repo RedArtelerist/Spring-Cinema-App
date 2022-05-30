@@ -1,6 +1,7 @@
 package com.example.cinema.telegrambot.model;
 
 import com.example.cinema.telegrambot.cash.BotStateCash;
+import com.example.cinema.telegrambot.model.handler.CallbackQueryHandler;
 import com.example.cinema.telegrambot.model.handler.MessageHandler;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
@@ -17,13 +18,15 @@ public class TelegramFacade {
     @Autowired
     private MessageHandler messageHandler;
     @Autowired
+    private CallbackQueryHandler callbackQueryHandler;
+    @Autowired
     private BotStateCash botStateCash;
 
     public BotApiMethod<?> handleUpdate(Update update) {
-
         if (update.hasCallbackQuery()) {
             CallbackQuery callbackQuery = update.getCallbackQuery();
-            return null;
+            return callbackQueryHandler.processCallbackQuery(callbackQuery);
+
         } else {
             Message message = update.getMessage();
             if (message != null && message.hasText()) {

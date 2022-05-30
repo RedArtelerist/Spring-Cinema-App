@@ -53,7 +53,7 @@ public class User implements UserDetails {
 
     @Column(nullable = false, unique = true, length = 60)
     @Email(message = "Email is not correct")
-    @NotBlank(message = "Email cannot be empty")
+    @NotBlank(message = "Email can't be empty")
     private String email;
 
     @ValidPassword

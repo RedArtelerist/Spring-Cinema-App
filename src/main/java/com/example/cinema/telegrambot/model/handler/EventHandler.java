@@ -2,7 +2,6 @@ package com.example.cinema.telegrambot.model.handler;
 
 import com.example.cinema.account.model.User;
 import com.example.cinema.account.service.UserService;
-import com.example.cinema.admin.dto.AdminMovieDto;
 import com.example.cinema.admin.repository.MovieRepository;
 import com.example.cinema.cinema.model.Cinema;
 import com.example.cinema.cinema.model.City;
@@ -17,7 +16,8 @@ import com.example.cinema.telegrambot.cash.SearchCash;
 import com.example.cinema.telegrambot.dto.Emojis;
 import com.example.cinema.telegrambot.dto.LoginDto;
 import com.example.cinema.telegrambot.dto.SearchDto;
-import com.example.cinema.telegrambot.model.*;
+import com.example.cinema.telegrambot.model.BotState;
+import com.example.cinema.telegrambot.model.TelegramBot;
 import com.example.cinema.telegrambot.service.MenuService;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +36,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 public class EventHandler {
@@ -149,32 +148,33 @@ public class EventHandler {
         return builder.toString();
     }
 
-    public BotApiMethod<?> enterCityHandler(Message message, long userId) {
+    public BotApiMethod<?> sendCityList(long chatId) {
         SendMessage sendMessage = new SendMessage();
-        sendMessage.setChatId(String.valueOf(message.getChatId()));
+        sendMessage.setChatId(String.valueOf(chatId));
+
+        var cities = Arrays.asList(City.values());
+
+        sendMessage.setText(Emojis.CITY + " Choose city:");
+        sendMessage.setReplyMarkup(menuService.getInlineMessageButtonsForCity(cities));
+        return sendMessage;
+    }
+
+    public BotApiMethod<?> cityHandler(long chatId, long userId, String cityStr) {
+        SendMessage sendMessage = new SendMessage();
+        sendMessage.setChatId(String.valueOf(chatId));
 
         try {
-            City city = City.valueOf(message.getText());
-            SearchDto searchDto = searchCash.getSearchMap().get(userId);
-            searchDto.setCity(city);
-            searchCash.saveSearchCash(userId, searchDto);
-
+            City city = City.valueOf(cityStr);
             var cinemas = cinemaRepository.findByCity(city);
+
             if(cinemas.isEmpty()){
                 sendMessage.setText(Emojis.MARK_FAILED + "There are no cinemas in this city");
                 botStateCash.saveBotState(userId, BotState.START);
                 return sendMessage;
             }
 
-            StringBuilder str = new StringBuilder();
-            for(Cinema cinema : cinemas)
-                str.append(cinema.getId()).append(". ").append(cinema.getName()).append("\n");
-
-            sendMessage.setText(str.toString());
-            telegramBot.sendMessage(sendMessage);
-
-            sendMessage.setText(Emojis.CINEMA + " Enter cinema id from list");
-            botStateCash.saveBotState(userId, BotState.ENTER_CINEMA);
+            sendMessage.setText(Emojis.CINEMA + " Choose cinema:");
+            sendMessage.setReplyMarkup(menuService.getInlineMessageButtonsForCinemas(cinemas));
         }
         catch (Exception ex){
             sendMessage.setText(Emojis.MARK_FAILED + "Can't find city with this name");
@@ -183,20 +183,15 @@ public class EventHandler {
         return sendMessage;
     }
 
-    public BotApiMethod<?> enterCinemaHandler(Message message, long userId) {
+    public BotApiMethod<?> cinemaHandler(long chatId, long userId, String cinemaId) {
         SendMessage sendMessage = new SendMessage();
-        sendMessage.setChatId(String.valueOf(message.getChatId()));
-        Cinema cinema;
-        SearchDto searchDto = searchCash.getSearchMap().get(userId);
-        try {
-            cinema = cinemaRepository.findActiveById(Long.parseLong(message.getText())).orElse(null);
-        }
-        catch (Exception ex){
-            sendMessage.setText(Emojis.MARK_FAILED + "The entered string is not a number, please try again");
-            return sendMessage;
-        }
-        if(cinema == null || cinema.getCity() != searchDto.getCity()){
-            sendMessage.setText(Emojis.MARK_FAILED + "The entered number is not in the list, please try again");
+        sendMessage.setChatId(String.valueOf(chatId));
+
+        Cinema cinema = cinemaRepository.findActiveById(Long.parseLong(cinemaId)).orElse(null);
+
+        if(cinema == null){
+            sendMessage.setText(Emojis.MARK_FAILED + "Cinema not found");
+            botStateCash.saveBotState(userId, BotState.START);
             return sendMessage;
         }
 
@@ -208,47 +203,45 @@ public class EventHandler {
             return sendMessage;
         }
 
-        StringBuilder str = new StringBuilder();
-        for(var movie : movies)
-            str.append(movie.getId()).append(". ").append(movie.getTitle()).append("\n");
-
-        sendMessage.setText(str.toString());
-        telegramBot.sendMessage(sendMessage);
-
-        sendMessage.setText(Emojis.MOVIE + " Enter movie id from list");
+        SearchDto searchDto = searchCash.getSearchMap().get(userId);
         searchDto.setCinema(cinema);
         searchCash.saveSearchCash(userId, searchDto);
-        botStateCash.saveBotState(userId, BotState.ENTER_MOVIE);
+
+        sendMessage.setText(Emojis.MOVIE + " Chose movie from the list");
+        sendMessage.setReplyMarkup(menuService.getInlineMessageButtonsForMovies(movies));
         return sendMessage;
     }
 
-    public BotApiMethod<?> enterMovieHandler(Message message, long userId) {
+    public BotApiMethod<?> movieHandler(long chatId, long userId, String movieId) {
         SendMessage sendMessage = new SendMessage();
-        sendMessage.setChatId(String.valueOf(message.getChatId()));
+        sendMessage.setChatId(String.valueOf(chatId));
 
         SearchDto searchDto = searchCash.getSearchMap().get(userId);
-        var movies = seanceRepository.getAdminMoviesByCinema(searchDto.getCinema());
-        AdminMovieDto movie;
+        Cinema cinema = searchDto.getCinema();
 
-        try {
-            movie = movieRepository.findAdminMovie(Long.parseLong(message.getText())).orElse(null);
+        if(cinema == null){
+            botStateCash.saveBotState(userId, BotState.START);
+            return sendCityList(chatId);
         }
-        catch (Exception ex){
-            sendMessage.setText(Emojis.MARK_FAILED + "The entered string is not a number, please try again");
-            return sendMessage;
-        }
+
+        var movie = movieRepository.findAdminMovie(Long.parseLong(movieId)).orElse(null);
+
         if(movie == null){
-            sendMessage.setText(Emojis.MARK_FAILED + "The entered number is not in the list, please try again");
-            return sendMessage;
-        }
-        boolean contains = movies.stream().anyMatch(m -> m.getId().equals(movie.getId()));
-
-        if(!contains){
-            sendMessage.setText(Emojis.MARK_FAILED + "The entered number is not in the list, please try again");
+            sendMessage.setText(Emojis.MARK_FAILED + "Movie not found");
+            botStateCash.saveBotState(userId, BotState.START);
             return sendMessage;
         }
 
-        sendMessage.setText(Emojis.DATE + " Enter date (example 02.04.2022)");
+        var movies = seanceRepository.getAdminMoviesByCinema(cinema);
+
+        if(movies.stream().noneMatch(m -> m.getId().equals(movie.getId()))){
+            sendMessage.setText(Emojis.MARK_FAILED +
+                    "Screenings for this movie were not found in " + cinema.getName() + " cinema"
+            );
+            return sendMessage;
+        }
+
+        sendMessage.setText(Emojis.DATE + " Enter date in format dd.mm.yyyy");
         searchDto.setMovie(movie);
 
         searchCash.saveSearchCash(userId, searchDto);
@@ -276,9 +269,9 @@ public class EventHandler {
             return sendMessage;
         }
 
-        Date newDate = DateUtils.addMonths(new Date(), 1);
+        Date newDate = DateUtils.addMonths(new Date(), 2);
         if(date.after(newDate)){
-            sendMessage.setText(Emojis.MARK_FAILED + "Enter a date less than a month from today");
+            sendMessage.setText(Emojis.MARK_FAILED + "Enter a date less than a two months from today");
             return sendMessage;
         }
 
@@ -302,7 +295,7 @@ public class EventHandler {
         String baseUrl = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString();
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
         InlineKeyboardButton keyboardButton = new InlineKeyboardButton();
-        keyboardButton.setText("View in the site");
+        keyboardButton.setText("View on the site");
 
         for (Seance seance : seances) {
             SendMessage sendMessage = new SendMessage();
@@ -343,17 +336,6 @@ public class EventHandler {
                 .append(Emojis.PRICE).append(" ").append("Min price: ₴").append(seance.getPrice()).append("\n")
                 .append("Available: ").append(available).append("/").append(amount);
         return builder.toString();
-    }
-
-    public BotApiMethod<?> sendCityList(long userId) {
-        SendMessage sendMessage = new SendMessage();
-        sendMessage.setChatId(String.valueOf(userId));
-        String cities = Arrays.stream(City.values())
-                .map(Object::toString)
-                .collect(Collectors.joining(", "));
-        
-        sendMessage.setText(Emojis.CITY + " Choose city: " + cities);
-        return sendMessage;
     }
 
     private Date parseDate(String s) throws ParseException {
